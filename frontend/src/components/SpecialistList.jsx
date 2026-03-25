@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const API_BASE_URL = "http://localhost:5000/api";
+import API_BASE_URL from "../config/api";
 
 import DepartmentGrid from "./DepartmentGrid";
 

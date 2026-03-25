@@ -15,7 +15,7 @@ For judge review and testing, please use the following verified credentials:
 
 | Role | Email | Password |
 | :--- | :--- | :--- |
-| **Patient** | `john.doe@example.com` | `password123` |
+| **Patient** | `john.doe@example.com` | `password123` | 
 | **Specialist** | `smith@medicare.com` | `password123` |
 | **Admin** | `admin@mediconnect.com` | `admin123` |
 
@@ -26,17 +26,33 @@ For judge review and testing, please use the following verified credentials:
 - **Database**: Simulated JSON-based persistence (Buildathon Ready)
 - **Integrations**: Mock Interswitch Identity & Payment Gateways
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Local Development)
 
-### Backend
-1. Navigate to `backend/`
-2. Run `npm install`
-3. Run `npm start` (Runs on Port 5000)
+Because we have optimized the project for submission, follow these steps to run it locally:
 
-### Frontend
-1. Navigate to `frontend/`
-2. Run `npm install`
-3. Run `npm run dev` (Runs on Port 5173)
+### 1. Backend Setup
+1. Open a terminal in the `backend/` folder.
+2. Run **`npm install`** (to restore dependencies).
+3. Run **`npm start`**.
+   -   *The backend will run on Port 5000.*
+
+### 2. Frontend Setup
+1. Open a second terminal in the `frontend/` folder.
+2. Run **`npm install`**.
+3. Run **`npm run dev`**.
+   -   *The frontend will run on Port 5173.*
+
+---
+
+## 🌍 Switching to Production (For Judges)
+
+We have centralized all API communication for easy deployment. To point the Frontend to a live hosted Backend (e.g., on Render):
+
+1.  Open **`frontend/src/config/api.js`**.
+2.  Change `const ENVIRONMENT = "local"` to **`"production"`**.
+3.  Update the `production.API_BASE_URL` with your live Render URL.
+
+This "Master Switch" pattern ensures your project works flawlessly in any environment.
 
 ## 🏗️ Production Readiness & Scalability
 

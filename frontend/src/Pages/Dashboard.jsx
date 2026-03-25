@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import API_BASE_URL from "../config/api";
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
@@ -17,7 +18,7 @@ const Dashboard = () => {
 
     const fetchAppointments = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/appointments/my", {
+        const res = await fetch(`${API_BASE_URL}/appointments/my`, {
           headers: { "Authorization": `Bearer ${token}` }
         });
         const data = await res.json();
@@ -53,7 +54,7 @@ const Dashboard = () => {
 
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:5000/api/appointments/verify-payment", {
+      const res = await fetch(`${API_BASE_URL}/appointments/verify-payment`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

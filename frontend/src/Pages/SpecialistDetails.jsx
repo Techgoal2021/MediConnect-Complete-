@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import INTERSWITCH_CONFIG from "../config/interswitch";
+import API_BASE_URL from "../config/api";
 
 const SpecialistDetails = () => {
   const { id } = useParams();
@@ -26,7 +27,7 @@ const SpecialistDetails = () => {
   useEffect(() => {
     const fetchSpecialist = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/specialists/${id}`);
+        const res = await fetch(`${API_BASE_URL}/specialists/${id}`);
         const data = await res.json();
         if (res.ok) {
           setSpecialist(data);
@@ -71,7 +72,7 @@ const SpecialistDetails = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/appointments/book", {
+      const res = await fetch(`${API_BASE_URL}/appointments/book`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
