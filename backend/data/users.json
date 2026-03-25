@@ -1,0 +1,380 @@
+[
+  {
+    "id": "7da74670-d840-48a9-9f14-eaa4ada024e6",
+    "name": "Dr. Adebayo Benson",
+    "email": "dr..adebayo.benson@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.592Z"
+  },
+  {
+    "id": "01a6bce8-a14e-49a1-9977-f82ff667fdb8",
+    "name": "Dr. Sarah Olatunji",
+    "email": "dr..sarah.olatunji@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.608Z"
+  },
+  {
+    "id": "bf556b5c-01e5-4c87-8e31-02729ca58a68",
+    "name": "Dr. Michael Chen",
+    "email": "dr..michael.chen@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.616Z"
+  },
+  {
+    "id": "8018b60e-7382-4e45-b79c-1504090cbbaf",
+    "name": "Dr. Fatima Yusuf",
+    "email": "dr..fatima.yusuf@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.620Z"
+  },
+  {
+    "id": "ab7fa0de-8235-4586-b91d-d34fd7b72dfe",
+    "name": "Dr. David Okafor",
+    "email": "dr..david.okafor@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.626Z"
+  },
+  {
+    "id": "51691f6f-4b66-40f5-8e1e-0f4f7c31f7bd",
+    "name": "Dr. Lisa Wong",
+    "email": "dr..lisa.wong@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.635Z"
+  },
+  {
+    "id": "5e35f5df-0c5c-4efe-80cc-4990057692b6",
+    "name": "Dr. Jane Smith",
+    "email": "dr..jane.smith@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.650Z"
+  },
+  {
+    "id": "53a971f3-f5b4-4e59-9ac2-ebfa01a52f15",
+    "name": "Dr. John Doe",
+    "email": "dr..john.doe@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.658Z"
+  },
+  {
+    "id": "b01d0422-39ab-4866-ad1b-b80b795f85b0",
+    "name": "Dr. Robert Miller",
+    "email": "dr..robert.miller@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.667Z"
+  },
+  {
+    "id": "0faa6376-9223-41b9-a4cb-4f340402a5e5",
+    "name": "Dr. Emily Davis",
+    "email": "dr..emily.davis@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.679Z"
+  },
+  {
+    "id": "56b78097-9f95-49e4-b164-2245c66d7374",
+    "name": "Dr. James Wilson",
+    "email": "dr..james.wilson@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.706Z"
+  },
+  {
+    "id": "95e19edb-84b0-4689-8909-dfc0ab274967",
+    "name": "Dr. Maria Garcia",
+    "email": "dr..maria.garcia@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.713Z"
+  },
+  {
+    "id": "856603f2-d91a-4986-981f-e12976bdf7e0",
+    "name": "Dr. Amaka Okafor",
+    "email": "dr..amaka.okafor@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.720Z"
+  },
+  {
+    "id": "207f29d9-f288-483f-a2e3-996f7d4be983",
+    "name": "Dr. Kevin Adams",
+    "email": "dr..kevin.adams@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.728Z"
+  },
+  {
+    "id": "d75ece22-7054-4c40-b132-995c9d024179",
+    "name": "Dr. Sophia Lee",
+    "email": "dr..sophia.lee@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.737Z"
+  },
+  {
+    "id": "e538ba7c-c8ce-4d01-afee-8629bb96a42b",
+    "name": "Dr. Brian Taylor",
+    "email": "dr..brian.taylor@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.744Z"
+  },
+  {
+    "id": "49802ac0-b2ea-4028-b0e6-1f3f0776f0f7",
+    "name": "Dr. Chloe Martin",
+    "email": "dr..chloe.martin@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.752Z"
+  },
+  {
+    "id": "9e67e855-43a0-4941-b241-eed16fca4342",
+    "name": "Dr. Daniel Brown",
+    "email": "dr..daniel.brown@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.759Z"
+  },
+  {
+    "id": "64bd8749-7837-4a01-8e16-3cffad385ff2",
+    "name": "Dr. Victor Hugo",
+    "email": "dr..victor.hugo@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.766Z"
+  },
+  {
+    "id": "c66b6471-5e67-42af-8c36-6d302d76a2ee",
+    "name": "Dr. Elena Rossi",
+    "email": "dr..elena.rossi@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.771Z"
+  },
+  {
+    "id": "0e95b592-5f61-4dba-bba4-511dbe0c07fa",
+    "name": "Dr. Liam Murphy",
+    "email": "dr..liam.murphy@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.775Z"
+  },
+  {
+    "id": "6daf9c43-5f07-4b1c-84b8-12679caa9298",
+    "name": "Dr. Isabella Silva",
+    "email": "dr..isabella.silva@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.782Z"
+  },
+  {
+    "id": "da35ae3f-5d3b-4a61-abe7-1813a1e30477",
+    "name": "Dr. Noah Patel",
+    "email": "dr..noah.patel@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:36.817Z"
+  },
+  {
+    "id": "b98743e3-b341-4a98-8e7c-be195f3c4775",
+    "name": "Dr. Mia Lopez",
+    "email": "dr..mia.lopez@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.008Z"
+  },
+  {
+    "id": "49d16007-215c-4168-871b-16941c8e102a",
+    "name": "Dr. Alan Grant",
+    "email": "dr..alan.grant@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.013Z"
+  },
+  {
+    "id": "d1ebbf7c-ce0c-495f-a8fe-dac62351d86b",
+    "name": "Dr. Rachel Green",
+    "email": "dr..rachel.green@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.021Z"
+  },
+  {
+    "id": "ff9dd41f-03c1-45b3-851a-890c78322691",
+    "name": "Dr. Steven Strange",
+    "email": "dr..steven.strange@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.030Z"
+  },
+  {
+    "id": "a068aba5-2150-4d24-8f11-99f59f9672ca",
+    "name": "Dr. Grace Hopper",
+    "email": "dr..grace.hopper@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.038Z"
+  },
+  {
+    "id": "d35f16a8-f21b-469e-b837-6031f4ebd60c",
+    "name": "Dr. Isaac Newton",
+    "email": "dr..isaac.newton@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.049Z"
+  },
+  {
+    "id": "ef1c0819-9999-4eb1-90c3-60c7859e6ff1",
+    "name": "Dr. Marie Curie",
+    "email": "dr..marie.curie@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.056Z"
+  },
+  {
+    "id": "4787b68e-7a46-434a-bfc4-5f67988fbed7",
+    "name": "Dr. Sigmund Freud",
+    "email": "dr..sigmund.freud@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.062Z"
+  },
+  {
+    "id": "33fd5692-3ed2-49f9-808a-3ecc1945ff7e",
+    "name": "Dr. Carl Jung",
+    "email": "dr..carl.jung@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.069Z"
+  },
+  {
+    "id": "c18c6e7e-5fa3-47cf-8e9b-d1199c4d938e",
+    "name": "Dr. Alfred Adler",
+    "email": "dr..alfred.adler@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.076Z"
+  },
+  {
+    "id": "42ab7fd5-9dc5-4b0a-b787-a75094f80470",
+    "name": "Dr. Karen Horney",
+    "email": "dr..karen.horney@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.084Z"
+  },
+  {
+    "id": "db2800b5-3487-4b32-a71b-451950b3dbf3",
+    "name": "Dr. Erik Erikson",
+    "email": "dr..erik.erikson@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.101Z"
+  },
+  {
+    "id": "63328c3a-617f-430c-be08-482cb73b24c9",
+    "name": "Dr. Anna Freud",
+    "email": "dr..anna.freud@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "isVerified": true,
+    "bvn": "22212345678",
+    "createdAt": "2026-03-25T16:25:37.108Z"
+  },
+  {
+    "id": "bb7136b5-c054-4a33-9332-f3d9bbff7a10",
+    "name": "Test Patient",
+    "email": "patient@example.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "patient",
+    "createdAt": "2026-03-25T16:25:37.115Z"
+  },
+  {
+    "id": "7dc30777-2539-409b-9845-25b5bcec7a86",
+    "name": "John Sowemimo",
+    "email": "sowemimo.john@gmail.com",
+    "password": "$2b$10$UO5bRvxchJk87WywQINzWuWu6cF6GE3h7Mc1KkOjuBzxu4LkcLqd6",
+    "role": "patient",
+    "phoneNumber": "08157060736",
+    "isVerified": false,
+    "createdAt": "2026-03-25T16:40:45.300Z"
+  }
+]

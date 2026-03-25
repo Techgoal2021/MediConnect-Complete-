@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #2c6ea0;
+  --color-navy: #00224f;
+}
+
+:root {
+  --medical-bg: #f8f9fa;
+  --text-gray: #555;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-gray);
+  background-color: white;
+}
+
+h1, h2, h3, h4, .font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+.bg-medical {
+  background-color: var(--medical-bg);
+}
+
+/* Custom button styles */
+@utility btn-medcare {
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  transition-property: all;
+  transition-duration: 300ms;
+  border-radius: 0.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+}
+
+@utility btn-medcare-primary {
+  @apply btn-medcare bg-primary text-white;
+}
+
+.btn-medcare-primary:hover {
+  @apply bg-navy;
+}
+
+@utility btn-medcare-outline {
+  @apply btn-medcare border border-primary text-primary;
+}
+
+.btn-medcare-outline:hover {
+  @apply bg-primary text-white;
+}
+
+@utility card-medcare {
+  @apply bg-white shadow-[0_15px_50px_rgba(0,0,0,0.04)] border border-slate-100 rounded-2xl overflow-hidden transition-all duration-500;
+}
+
+@utility animate-scale-in {
+  animation: scale-in 0.3s ease-out forwards;
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

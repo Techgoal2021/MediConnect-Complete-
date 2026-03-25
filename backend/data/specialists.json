@@ -1,0 +1,326 @@
+[
+  {
+    "id": "2e7c29d9-a421-4695-a2dd-5be08b12d0c4",
+    "userId": "7da74670-d840-48a9-9f14-eaa4ada024e6",
+    "specialization": "General Medicine",
+    "bio": "Experienced family physician focused on preventive care.",
+    "consultationFee": 5638,
+    "rating": "4.9",
+    "createdAt": "2026-03-25T16:25:36.595Z"
+  },
+  {
+    "id": "c42b7a13-32df-4546-acc5-32dfbe6a601e",
+    "userId": "01a6bce8-a14e-49a1-9977-f82ff667fdb8",
+    "specialization": "General Medicine",
+    "bio": "Primary care expert with 10+ years in community health.",
+    "consultationFee": 5008,
+    "rating": "4.6",
+    "createdAt": "2026-03-25T16:25:36.609Z"
+  },
+  {
+    "id": "d6a1f1a9-6c14-4f5b-8ad6-9e843d60c06d",
+    "userId": "bf556b5c-01e5-4c87-8e31-02729ca58a68",
+    "specialization": "General Medicine",
+    "bio": "Holistic approach to health and lifestyle management.",
+    "consultationFee": 6032,
+    "rating": "4.7",
+    "createdAt": "2026-03-25T16:25:36.617Z"
+  },
+  {
+    "id": "034da98d-2c4c-46ce-aa94-4f93c10da247",
+    "userId": "8018b60e-7382-4e45-b79c-1504090cbbaf",
+    "specialization": "General Medicine",
+    "bio": "Dedicated to providing accessible healthcare for all families.",
+    "consultationFee": 7383,
+    "rating": "3.7",
+    "createdAt": "2026-03-25T16:25:36.620Z"
+  },
+  {
+    "id": "64da12c7-8023-4710-a2dc-0d08f9e56f4f",
+    "userId": "ab7fa0de-8235-4586-b91d-d34fd7b72dfe",
+    "specialization": "General Medicine",
+    "bio": "Specialist in chronic disease management and geriatrics.",
+    "consultationFee": 7138,
+    "rating": "5.0",
+    "createdAt": "2026-03-25T16:25:36.627Z"
+  },
+  {
+    "id": "01b03863-0479-455d-b676-c9671ace442a",
+    "userId": "51691f6f-4b66-40f5-8e1e-0f4f7c31f7bd",
+    "specialization": "General Medicine",
+    "bio": "Expert in infectious diseases and travel medicine.",
+    "consultationFee": 6552,
+    "rating": "3.9",
+    "createdAt": "2026-03-25T16:25:36.636Z"
+  },
+  {
+    "id": "db57f9a4-e28f-4f21-9b44-9faf9f52a0fc",
+    "userId": "5e35f5df-0c5c-4efe-80cc-4990057692b6",
+    "specialization": "Cardiology",
+    "bio": "Board-certified cardiologist specializing in heart failure.",
+    "consultationFee": 8734,
+    "rating": "3.6",
+    "createdAt": "2026-03-25T16:25:36.651Z"
+  },
+  {
+    "id": "abdcca25-f1b5-420a-9446-aef1e0a62db6",
+    "userId": "53a971f3-f5b4-4e59-9ac2-ebfa01a52f15",
+    "specialization": "Cardiology",
+    "bio": "Expert in interventional cardiology and cardiac imaging.",
+    "consultationFee": 9856,
+    "rating": "4.9",
+    "createdAt": "2026-03-25T16:25:36.659Z"
+  },
+  {
+    "id": "06624c8c-129d-4488-8b6a-904756d2634f",
+    "userId": "b01d0422-39ab-4866-ad1b-b80b795f85b0",
+    "specialization": "Cardiology",
+    "bio": "Specialist in heart rhythm disorders and electrophysiology.",
+    "consultationFee": 5986,
+    "rating": "4.0",
+    "createdAt": "2026-03-25T16:25:36.669Z"
+  },
+  {
+    "id": "dd63d02a-3212-4acb-9e9f-1f4836be4b00",
+    "userId": "0faa6376-9223-41b9-a4cb-4f340402a5e5",
+    "specialization": "Cardiology",
+    "bio": "Focused on pediatric cardiology and congenital heart diseases.",
+    "consultationFee": 5517,
+    "rating": "4.8",
+    "createdAt": "2026-03-25T16:25:36.680Z"
+  },
+  {
+    "id": "ef86daaa-0dfe-46f2-ae8b-fa8882ba45be",
+    "userId": "56b78097-9f95-49e4-b164-2245c66d7374",
+    "specialization": "Cardiology",
+    "bio": "Leading researcher in preventive cardiology and hypertension.",
+    "consultationFee": 8005,
+    "rating": "3.9",
+    "createdAt": "2026-03-25T16:25:36.707Z"
+  },
+  {
+    "id": "b18bd8cf-92f8-4b5d-b738-9a8f4a5ee5b7",
+    "userId": "95e19edb-84b0-4689-8909-dfc0ab274967",
+    "specialization": "Cardiology",
+    "bio": "Expert in valvular heart disease and echocardiography.",
+    "consultationFee": 7258,
+    "rating": "4.2",
+    "createdAt": "2026-03-25T16:25:36.714Z"
+  },
+  {
+    "id": "8e0a843b-b33b-4c14-ba5c-17cff25278dc",
+    "userId": "856603f2-d91a-4986-981f-e12976bdf7e0",
+    "specialization": "Pediatrics",
+    "bio": "Compassionate pediatrician with a focus on neonatal care.",
+    "consultationFee": 6444,
+    "rating": "4.2",
+    "createdAt": "2026-03-25T16:25:36.721Z"
+  },
+  {
+    "id": "413b2ec8-acbd-4ba3-9b7d-b46800f9ee0c",
+    "userId": "207f29d9-f288-483f-a2e3-996f7d4be983",
+    "specialization": "Pediatrics",
+    "bio": "Specialist in child development and behavioral pediatrics.",
+    "consultationFee": 9315,
+    "rating": "4.1",
+    "createdAt": "2026-03-25T16:25:36.729Z"
+  },
+  {
+    "id": "edec16be-7e37-48b1-9a2e-ee808d73261d",
+    "userId": "d75ece22-7054-4c40-b132-995c9d024179",
+    "specialization": "Pediatrics",
+    "bio": "Expert in pediatric nutrition and childhood obesity.",
+    "consultationFee": 5096,
+    "rating": "4.4",
+    "createdAt": "2026-03-25T16:25:36.738Z"
+  },
+  {
+    "id": "824ffb80-9cdc-4f71-8a69-103875bcf123",
+    "userId": "e538ba7c-c8ce-4d01-afee-8629bb96a42b",
+    "specialization": "Pediatrics",
+    "bio": "Focused on pediatric emergency medicine and acute care.",
+    "consultationFee": 5751,
+    "rating": "3.7",
+    "createdAt": "2026-03-25T16:25:36.744Z"
+  },
+  {
+    "id": "6a828a2f-9195-4683-86e0-c2e2946cc901",
+    "userId": "49802ac0-b2ea-4028-b0e6-1f3f0776f0f7",
+    "specialization": "Pediatrics",
+    "bio": "Specialist in pediatric allergy and immunology.",
+    "consultationFee": 6459,
+    "rating": "4.9",
+    "createdAt": "2026-03-25T16:25:36.753Z"
+  },
+  {
+    "id": "d85f0721-14e7-4d7c-bc0f-5e5351da1256",
+    "userId": "9e67e855-43a0-4941-b241-eed16fca4342",
+    "specialization": "Pediatrics",
+    "bio": "Dedicated to adolescent medicine and mental health.",
+    "consultationFee": 9672,
+    "rating": "4.7",
+    "createdAt": "2026-03-25T16:25:36.759Z"
+  },
+  {
+    "id": "ae4c5d3d-03b4-4787-b7f0-5e1acc65834c",
+    "userId": "64bd8749-7837-4a01-8e16-3cffad385ff2",
+    "specialization": "Dermatology",
+    "bio": "Expert in clinical and aesthetic dermatology.",
+    "consultationFee": 9475,
+    "rating": "3.8",
+    "createdAt": "2026-03-25T16:25:36.766Z"
+  },
+  {
+    "id": "379fc6a1-4549-4695-ad63-7fd48f9db8ac",
+    "userId": "c66b6471-5e67-42af-8c36-6d302d76a2ee",
+    "specialization": "Dermatology",
+    "bio": "Specialist in skin cancer detection and dermatosurgery.",
+    "consultationFee": 8164,
+    "rating": "4.6",
+    "createdAt": "2026-03-25T16:25:36.772Z"
+  },
+  {
+    "id": "e6edbae8-3399-4155-85e9-7d4fbac60f5e",
+    "userId": "0e95b592-5f61-4dba-bba4-511dbe0c07fa",
+    "specialization": "Dermatology",
+    "bio": "Focused on inflammatory skin conditions like eczema and psoriasis.",
+    "consultationFee": 7539,
+    "rating": "4.4",
+    "createdAt": "2026-03-25T16:25:36.775Z"
+  },
+  {
+    "id": "76b0c8a3-541e-4146-8652-efb3516bd46e",
+    "userId": "6daf9c43-5f07-4b1c-84b8-12679caa9298",
+    "specialization": "Dermatology",
+    "bio": "Expert in pediatric dermatology and rare skin disorders.",
+    "consultationFee": 5542,
+    "rating": "4.1",
+    "createdAt": "2026-03-25T16:25:36.782Z"
+  },
+  {
+    "id": "5741c08f-6ecf-403a-b79a-246ac86b0081",
+    "userId": "da35ae3f-5d3b-4a61-abe7-1813a1e30477",
+    "specialization": "Dermatology",
+    "bio": "Specialist in laser therapy and cosmetic dermatology.",
+    "consultationFee": 6326,
+    "rating": "4.9",
+    "createdAt": "2026-03-25T16:25:36.818Z"
+  },
+  {
+    "id": "7b07a32d-6a37-443e-a4c8-e458455c0579",
+    "userId": "b98743e3-b341-4a98-8e7c-be195f3c4775",
+    "specialization": "Dermatology",
+    "bio": "Focused on hair and nail disorders and trichology.",
+    "consultationFee": 6115,
+    "rating": "4.2",
+    "createdAt": "2026-03-25T16:25:37.009Z"
+  },
+  {
+    "id": "aff36d61-9adf-4115-8212-698e46638b2f",
+    "userId": "49d16007-215c-4168-871b-16941c8e102a",
+    "specialization": "Neurology",
+    "bio": "Specialist in neurological disorders and stroke recovery.",
+    "consultationFee": 5077,
+    "rating": "4.5",
+    "createdAt": "2026-03-25T16:25:37.014Z"
+  },
+  {
+    "id": "df6cffc1-e636-4398-b7f6-ea7a91eeb061",
+    "userId": "d1ebbf7c-ce0c-495f-a8fe-dac62351d86b",
+    "specialization": "Neurology",
+    "bio": "Expert in headache management and migraine therapy.",
+    "consultationFee": 6412,
+    "rating": "4.3",
+    "createdAt": "2026-03-25T16:25:37.023Z"
+  },
+  {
+    "id": "b42e0f55-9ee6-4438-ae77-60b95ce99f14",
+    "userId": "ff9dd41f-03c1-45b3-851a-890c78322691",
+    "specialization": "Neurology",
+    "bio": "Focused on epilepsy research and neuro-rehabilitation.",
+    "consultationFee": 9101,
+    "rating": "4.4",
+    "createdAt": "2026-03-25T16:25:37.031Z"
+  },
+  {
+    "id": "a2c20544-a55f-4d42-80c0-15b757b90ad2",
+    "userId": "a068aba5-2150-4d24-8f11-99f59f9672ca",
+    "specialization": "Neurology",
+    "bio": "Specialist in neuromuscular disorders and ALS care.",
+    "consultationFee": 9146,
+    "rating": "4.5",
+    "createdAt": "2026-03-25T16:25:37.040Z"
+  },
+  {
+    "id": "dddad3dc-824b-4140-881a-50482eb0b678",
+    "userId": "d35f16a8-f21b-469e-b837-6031f4ebd60c",
+    "specialization": "Neurology",
+    "bio": "Expert in movement disorders and Parkinson's disease.",
+    "consultationFee": 5498,
+    "rating": "3.7",
+    "createdAt": "2026-03-25T16:25:37.049Z"
+  },
+  {
+    "id": "136fdbaa-1348-465e-ac00-69942e39073f",
+    "userId": "ef1c0819-9999-4eb1-90c3-60c7859e6ff1",
+    "specialization": "Neurology",
+    "bio": "Focused on neuro-oncology and brain tumor therapy.",
+    "consultationFee": 8666,
+    "rating": "3.5",
+    "createdAt": "2026-03-25T16:25:37.056Z"
+  },
+  {
+    "id": "a1c83546-93c4-42b1-a7f0-b5680391a45e",
+    "userId": "4787b68e-7a46-434a-bfc4-5f67988fbed7",
+    "specialization": "Psychiatry",
+    "bio": "Expert in psychodynamic therapy and mental health.",
+    "consultationFee": 9154,
+    "rating": "3.8",
+    "createdAt": "2026-03-25T16:25:37.063Z"
+  },
+  {
+    "id": "bbdeaaf9-3cd8-48ee-a6ae-e76ab87815fa",
+    "userId": "33fd5692-3ed2-49f9-808a-3ecc1945ff7e",
+    "specialization": "Psychiatry",
+    "bio": "Specialist in analytical psychology and personality disorders.",
+    "consultationFee": 9638,
+    "rating": "4.3",
+    "createdAt": "2026-03-25T16:25:37.070Z"
+  },
+  {
+    "id": "cafc0413-9eba-4206-8a13-89fa90e1d709",
+    "userId": "c18c6e7e-5fa3-47cf-8e9b-d1199c4d938e",
+    "specialization": "Psychiatry",
+    "bio": "Focused on individual psychology and social interest.",
+    "consultationFee": 7751,
+    "rating": "4.0",
+    "createdAt": "2026-03-25T16:25:37.076Z"
+  },
+  {
+    "id": "752af586-f798-4c48-b508-cafeababa406",
+    "userId": "42ab7fd5-9dc5-4b0a-b787-a75094f80470",
+    "specialization": "Psychiatry",
+    "bio": "Expert in neurosis and feminine psychology.",
+    "consultationFee": 8772,
+    "rating": "3.9",
+    "createdAt": "2026-03-25T16:25:37.085Z"
+  },
+  {
+    "id": "c2381b2b-0959-4c7c-a9fe-5812d1934f37",
+    "userId": "db2800b5-3487-4b32-a71b-451950b3dbf3",
+    "specialization": "Psychiatry",
+    "bio": "Specialist in psychosocial development and identity.",
+    "consultationFee": 5852,
+    "rating": "5.0",
+    "createdAt": "2026-03-25T16:25:37.101Z"
+  },
+  {
+    "id": "2668bb78-f66e-4657-935d-da3c465f8f9c",
+    "userId": "63328c3a-617f-430c-be08-482cb73b24c9",
+    "specialization": "Psychiatry",
+    "bio": "Focused on child analysis and ego psychology.",
+    "consultationFee": 5170,
+    "rating": "4.2",
+    "createdAt": "2026-03-25T16:25:37.108Z"
+  }
+]
