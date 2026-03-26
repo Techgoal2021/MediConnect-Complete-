@@ -1,1 +1,13 @@
-node_modules/\n.env\n.DS_Store\nfrontend/node_modules/\nbackend/node_modules/
+node_modules/
+.env
+.DS_Store
+frontend/node_modules/
+backend/node_modules/
+backend/ml_service/__pycache__/
+backend/ml_service/*.pyc
+backend/ml_service/venv/
+backend/ml_service/env/
+.antigravity/
+.system_generated/
+/tmp/
+

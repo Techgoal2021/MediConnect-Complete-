@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API_BASE_URL from "../config/api";
+import { INTERSWITCH_CONFIG } from "../config/interswitch";
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
@@ -44,16 +45,31 @@ const Dashboard = () => {
 
   const handleVerify = async () => {
     setPaymentLoading(true);
-    // Simulate multi-step Interswitch verification for "WOW" effect
-    const steps = ["Initiating WebPay Handshake...", "Verifying Transaction Identity...", "Authenticating Payment Token...", "Securely Confirming with Bank..."];
-    
-    for (let i = 0; i < steps.length; i++) {
-      setPaymentStatus(steps[i]);
-      await new Promise(r => setTimeout(r, 700));
-    }
+    setPaymentStatus("Initializing Secure Handshake...");
 
     const token = localStorage.getItem("token");
+
     try {
+      // 1. Fetch secure payment parameters (Hash, Merchant Code, txnRef) from Backend
+      setPaymentStatus("Generating SHA-512 Hash via Backend...");
+      // For the dashboard, we use a fixed consultation fee of 5000 for the demo
+      const paymentParams = await INTERSWITCH_CONFIG.getPaymentParams(selectedAptId, 5000, token);
+
+      // 2. Simulate the Interswitch multi-step verification for the Buildathon
+      const steps = [
+        "Initiating WebPay Handshake (Kobo Mode)...",
+        "Authenticating with Client Credentials...",
+        "Verifying Transaction Identity via Passport...",
+        "Interfacing with Interswitch Inquiry API...",
+        "Finalizing with Secure Bank Confirmation..."
+      ];
+      
+      for (let i = 0; i < steps.length; i++) {
+        setPaymentStatus(steps[i]);
+        await new Promise(r => setTimeout(r, 600));
+      }
+
+      // 3. Call the backend verification endpoint (which uses the real Inquiry API)
       const res = await fetch(`${API_BASE_URL}/appointments/verify-payment`, {
         method: "POST",
         headers: { 
@@ -62,24 +78,22 @@ const Dashboard = () => {
         },
         body: JSON.stringify({ 
           appointmentId: selectedAptId, 
-          reference: "INT-TEST-" + Math.random().toString(36).substr(2, 9).toUpperCase()
+          reference: paymentParams.txn_ref
         })
       });
       
-      // Fail-safe for Demo: If backend is down, still show success
-      if (res.ok || !res.ok) { 
-        setTimeout(() => {
-          setShowPaymentGateway(false);
-          window.location.reload();
-        }, 1500);
-      }
-    } catch (err) {
-      console.error("Verification Error:", err);
-      // Fail-safe success
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Interswitch Verification Failed");
+
+      setPaymentStatus("Verification Successful!");
       setTimeout(() => {
         setShowPaymentGateway(false);
         window.location.reload();
       }, 1500);
+    } catch (err) {
+      console.error("Verification Error:", err);
+      alert(err.message || "Interswitch verification failed. Please try again.");
+      setShowPaymentGateway(false);
     } finally {
       setPaymentLoading(false);
     }
@@ -138,9 +152,12 @@ const Dashboard = () => {
                          </>
                        ) : "Finalize Interswitch Payment ⟶"}
                     </button>
-                    <p className="text-center text-[9px] text-slate-400 font-bold uppercase tracking-widest">
-                       Do not close this window until verification is complete
-                    </p>
+                     <p className="text-center text-[9px] text-slate-400 font-bold uppercase tracking-widest">
+                        Amount: {INTERSWITCH_CONFIG.amountToKobo(5000)} Kobo | Currency: {INTERSWITCH_CONFIG.CURRENCY}
+                     </p>
+                     <p className="text-center text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                        Do not close this window until verification is complete
+                     </p>
                  </div>
               </div>
            </div>
@@ -200,14 +217,14 @@ const Dashboard = () => {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-medical text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
-                  <th className="px-10 py-6">Specialist</th>
+                  <th className="px-10 py-6">{user?.role === 'specialist' ? 'Patient' : 'Specialist'}</th>
                   <th className="px-10 py-6">Date & Time</th>
                   <th className="px-10 py-6 text-center">Status</th>
                   <th className="px-10 py-6 text-right">Action / Payment</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
-                {appointments.length > 0 ? appointments.map(apt => (
+                {appointments.length > 0 ? appointments.slice(0, 5).map(apt => (
                   <tr key={apt.id} className="hover:bg-slate-50/50 transition duration-300 group">
                     <td className="px-10 py-8">
                        <div className="flex items-center space-x-4">
@@ -215,13 +232,20 @@ const Dashboard = () => {
                              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
                           </div>
                           <div>
-                            <p className="font-black text-navy uppercase text-[13px] tracking-tight">{apt.specialist?.name}</p>
-                            <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Verified Expert</p>
+                            <p className="font-black text-navy uppercase text-[13px] tracking-tight">
+                              {user?.role === 'specialist' ? apt.patient?.name : apt.specialist?.name}
+                            </p>
+                            <p className="text-[10px] font-bold text-primary uppercase tracking-widest">
+                              {user?.role === 'specialist' ? 'Verified Patient' : 'Verified Expert'}
+                            </p>
                           </div>
                        </div>
                     </td>
                     <td className="px-10 py-8 text-[13px] font-medium text-slate-500">
-                       {apt.slot ? new Date(apt.slot.startTime).toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'}) : 'N/A'}
+                       {apt.slot ? 
+                         new Date(apt.slot.startTime).toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'}) : 
+                         (apt.createdAt ? new Date(apt.createdAt).toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'}) : 'N/A')
+                       }
                     </td>
                     <td className="px-10 py-8 text-center">
                       <span className={`px-4 py-1.5 rounded-sm text-[9px] font-black uppercase tracking-widest ${

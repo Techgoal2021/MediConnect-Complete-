@@ -14,7 +14,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.clear();
     setUser(null);
-    navigate("/");
+    window.location.href = "/";
   };
 
   return (
@@ -79,7 +79,7 @@ const Navbar = () => {
                   <Link to="/dashboard" className="text-primary hover:text-navy transition font-black">
                     {user.name}
                   </Link>
-                  <button onClick={handleLogout} className="text-slate-400 hover:text-navy transition text-[11px]">LOGOUT</button>
+                  <button onClick={handleLogout} className="text-slate-400 hover:text-navy transition text-[11px] cursor-pointer">LOGOUT</button>
                 </>
               ) : (
                 <>

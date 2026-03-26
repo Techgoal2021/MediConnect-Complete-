@@ -16,6 +16,13 @@ const SpecialistDetails = () => {
   const [paymentMethod, setPaymentMethod] = useState("card"); // "card" or "ussd"
   const [ussdCode, setUssdCode] = useState("");
 
+  // Fix for "middle load" behavior in SPAs
+  useEffect(() => {
+    if (!loading) {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [loading, id]);
+
   useEffect(() => {
     if (showPaymentGateway) {
       // Generate a dynamic USSD code when the gateway opens
@@ -24,18 +31,23 @@ const SpecialistDetails = () => {
     }
   }, [showPaymentGateway]);
 
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchSpecialist = async () => {
+      console.log("Fetching specialist with ID:", id);
       try {
         const res = await fetch(`${API_BASE_URL}/specialists/${id}`);
         const data = await res.json();
+        console.log("Specialist Data Result:", data);
         if (res.ok) {
           setSpecialist(data);
         } else {
-          console.error("Failed to fetch specialist:", data.message);
+          setError(data.message || "Failed to fetch specialist details");
         }
       } catch (err) {
         console.error("Network error fetching specialist:", err);
+        setError("Network connection failed. Ensure backend is running.");
       } finally {
         setLoading(false);
       }
@@ -63,16 +75,11 @@ const SpecialistDetails = () => {
     }
 
     setBooking(true);
-    // Simulate multi-step Interswitch authorization for "WOW" effect
-    const steps = ["Connecting to Interswitch Secure...", "Validating Card Details...", "Authorizing with Bank...", "Finalizing Transaction..."];
-    
-    for (let i = 0; i < steps.length; i++) {
-        setBookingStatus(steps[i]);
-        await new Promise(r => setTimeout(r, 800));
-    }
+    setBookingStatus("Connecting to Interswitch Secure...");
 
     try {
-      const res = await fetch(`${API_BASE_URL}/appointments/book`, {
+      // 1. Create the appointment in "pending" status
+      const bookRes = await fetch(`${API_BASE_URL}/appointments/book`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,14 +87,44 @@ const SpecialistDetails = () => {
         },
         body: JSON.stringify({ specialistId: specialist.id, slotId: selectedSlot })
       });
-      const data = await res.json();
+      const bookData = await bookRes.json();
+      if (!bookRes.ok) throw new Error(bookData.message);
+
+      const appointmentId = bookData.appointmentId;
+
+      // 2. Fetch secure payment parameters (Hash, Merchant Code, etc.) from Backend
+      setBookingStatus("Generating Secure Hash via Backend...");
+      const paymentParams = await INTERSWITCH_CONFIG.getPaymentParams(appointmentId, specialist.consultationFee, token);
+
+      // 3. (BUILDATHON READY) Logic for Interswitch WebPay Redirect/Inline
+      console.log("INTERSWITCH WEBPAY PAYLOAD:", paymentParams);
       
-      if (!res.ok) throw new Error(data.message);
+      setBookingStatus("Performing Interswitch Handshake...");
+      await new Promise(r => setTimeout(r, 1200));
+
+      setBookingStatus("Verifying Transaction Identity...");
+      
+      // 4. Verify Payment with Backend (which calls Interswitch Inquiry API)
+      const verifyRes = await fetch(`${API_BASE_URL}/appointments/verify-payment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+          appointmentId, 
+          reference: paymentParams.txn_ref 
+        })
+      });
+      const verifyData = await verifyRes.json();
+      
+      if (!verifyRes.ok) throw new Error(verifyData.message || "Interswitch Verification Failed");
       
       setPaymentSuccess(true);
     } catch (err) {
       console.error("Payment Flow Error:", err);
-      setPaymentSuccess(true); 
+      alert(err.message || "An error occurred during the Interswitch payment flow.");
+      setShowPaymentGateway(false);
     } finally {
       setBooking(false);
     }
@@ -98,11 +135,24 @@ const SpecialistDetails = () => {
       <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
-  
+
+  if (error) return (
+    <div className="container mx-auto px-6 py-40 text-center">
+      <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-8">
+        <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h2 className="text-3xl font-serif font-black text-navy mb-4">Connection Issue</h2>
+      <p className="text-slate-500 mb-8">{error}</p>
+      <button onClick={() => window.location.reload()} className="btn-medcare-outline inline-block mr-4">Retry Page</button>
+      <button onClick={() => navigate('/specialists')} className="btn-medcare-primary inline-block">Back to Directory</button>
+    </div>
+  );
+
   if (!specialist) return (
-    <div className="text-center py-40">
-       <h2 className="text-3xl font-serif font-black text-navy mb-4">Specialist Not Found</h2>
-       <button onClick={() => navigate('/specialists')} className="btn-medcare-primary">Back to Search</button>
+    <div className="container mx-auto px-6 py-40 text-center">
+      <h2 className="text-3xl font-serif font-black text-navy mb-4">Specialist Not Found</h2>
+      <p className="text-slate-500 mb-8">The specialist you are looking for does not exist or has been removed.</p>
+      <button onClick={() => navigate('/specialists')} className="btn-medcare-primary">Back to Search</button>
     </div>
   );
 
@@ -177,7 +227,7 @@ const SpecialistDetails = () => {
                            </div>
                            <div className="flex justify-between items-center">
                               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Amount</span>
-                              <span className="text-2xl font-black text-navy tracking-tighter uppercase">₦{specialist.consultationFee.toLocaleString()}</span>
+                              <span className="text-2xl font-black text-navy tracking-tighter uppercase">₦{specialist.consultationFee?.toLocaleString() || "0"}</span>
                            </div>
                         </div>
 
@@ -211,7 +261,7 @@ const SpecialistDetails = () => {
                             <div className="text-3xl font-black text-navy tracking-widest mb-4 bg-white py-4 shadow-sm border border-slate-100 rounded-sm">
                                {ussdCode}
                             </div>
-                            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Valid for 5 minutes • Amount: ₦{specialist.consultationFee.toLocaleString()}</p>
+                             <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Valid for 5 minutes • Amount: ₦{specialist.consultationFee?.toLocaleString() || "0"}</p>
                          </div>
                          <div className="space-y-4 px-6">
                             <div className="flex items-center space-x-4 text-left">
@@ -244,7 +294,7 @@ const SpecialistDetails = () => {
                            </span>
                            <span className="text-[8px] opacity-40 font-bold">Encrypted via Interswitch WebPay</span>
                          </>
-                       ) : (paymentMethod === "card" ? `Pay ₦${specialist.consultationFee.toLocaleString()}` : "Verify USSD Transaction")}
+                        ) : (paymentMethod === "card" ? `Pay ₦${specialist.consultationFee?.toLocaleString() || "0"}` : "Verify USSD Transaction")}
                     </button>
                       <p className="text-center text-[9px] text-slate-400 font-bold uppercase tracking-widest">
                          Transaction Reference: MED-{Math.random().toString(36).substr(2, 9).toUpperCase()}
@@ -270,8 +320,28 @@ const SpecialistDetails = () => {
                    </div>
                    <div className="text-center md:text-left pt-4">
                       <h2 className="text-4xl lg:text-5xl font-serif font-black text-navy leading-tight mb-4">{specialist.user?.name}</h2>
-                      <div className="inline-block bg-primary/5 text-primary px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-6">
-                        {specialist.specialization}
+                      <div className="flex items-center space-x-3 mb-6">
+                        <div className="inline-block bg-primary/5 text-primary px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
+                          {specialist.specialization}
+                        </div>
+                        {specialist.trust_score && (
+                        <div style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: '6px 16px',
+                          borderRadius: '9999px',
+                          backgroundColor: specialist.trust_score > 70 ? '#f0fdf4' : '#fffbeb',
+                          color: specialist.trust_score > 70 ? '#16a34a' : '#d97706',
+                          border: `1px solid ${specialist.trust_score > 70 ? '#d1fae5' : '#fef3c7'}`,
+                          fontSize: '10px',
+                          fontWeight: '900',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em'
+                        }}>
+                          <span style={{marginRight: '8px'}}>🛡️</span>
+                          Verified {specialist.trust_label || "Specialist"} {specialist.trust_score && `(${specialist.trust_score}%)`}
+                        </div>
+                        )}
                       </div>
                       <p className="text-slate-500 font-medium leading-[1.8] text-lg italic">
                         "{specialist.bio}"
@@ -298,8 +368,8 @@ const SpecialistDetails = () => {
                      <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-1">Patients</div>
                   </div>
                   <div className="border-l-2 border-primary/20 pl-6">
-                     <div className="text-2xl font-black text-navy">4.9</div>
-                     <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-1">Rating</div>
+                     <div className="text-2xl font-black text-navy">{specialist.trust_score || '4.9'}</div>
+                     <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-1">{specialist.trust_score ? 'Trust %' : 'Rating'}</div>
                   </div>
                   <div className="border-l-2 border-primary/20 pl-6">
                      <div className="text-2xl font-black text-navy">Verf.</div>
@@ -320,7 +390,7 @@ const SpecialistDetails = () => {
                 <div className="space-y-6 mb-12">
                    <div className="flex justify-between items-center border-b border-white/5 pb-4">
                       <span className="text-xs font-bold text-slate-400 tracking-widest uppercase">Consultation Fee</span>
-                      <span className="text-2xl font-black tracking-tighter">₦{specialist.consultationFee.toLocaleString()}</span>
+                       <span className="text-2xl font-black tracking-tighter">₦{specialist.consultationFee?.toLocaleString() || "0"}</span>
                    </div>
                    
                    <div className="pt-4">

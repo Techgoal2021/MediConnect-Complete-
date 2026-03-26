@@ -360,21 +360,43 @@
     "createdAt": "2026-03-25T16:25:37.108Z"
   },
   {
-    "id": "bb7136b5-c054-4a33-9332-f3d9bbff7a10",
-    "name": "Test Patient",
-    "email": "patient@example.com",
-    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
-    "role": "patient",
-    "createdAt": "2026-03-25T16:25:37.115Z"
-  },
-  {
-    "id": "7dc30777-2539-409b-9845-25b5bcec7a86",
+    "id": "e82342ea5ba5461432b0b70e367cc30d",
     "name": "John Sowemimo",
     "email": "sowemimo.john@gmail.com",
-    "password": "$2b$10$UO5bRvxchJk87WywQINzWuWu6cF6GE3h7Mc1KkOjuBzxu4LkcLqd6",
+    "password": "$2b$10$cc595lQnE9lHsNCiOnA1ee0SY5i/MaAZxhUzHgs6c9LgHQFrevP1q",
     "role": "patient",
     "phoneNumber": "08157060736",
     "isVerified": false,
-    "createdAt": "2026-03-25T16:40:45.300Z"
+    "createdAt": "2026-03-26T19:26:20.042Z"
+  },
+  {
+    "id": "cb139c60ad05ea88043c187a19be2d82",
+    "name": "Test User",
+    "email": "test_user_2026@gmail.com",
+    "password": "$2b$10$ysX4S8W4dZTn.BZskSRyyulmgobfLgv.0AWzHP4GCfEZF5AmgkIXW",
+    "role": "patient",
+    "phoneNumber": "08012345678",
+    "isVerified": false,
+    "createdAt": "2026-03-26T19:37:53.077Z"
+  },
+  {
+    "id": "e877a309a2ccd5424e64765fe4473f1e",
+    "name": "bada",
+    "email": "bada_seun@gmail.com",
+    "password": "$2b$10$ZLbLBANWgLmzef00AuiWWe6IdQS5OVwbQ8eIbdqX2OwRxbRw9ZLWa",
+    "role": "patient",
+    "phoneNumber": "seun",
+    "isVerified": false,
+    "createdAt": "2026-03-26T20:00:25.054Z"
+  },
+  {
+    "id": "8acb3530f87c902021707f46741a52e5",
+    "name": "UUID Specialist",
+    "email": "spec_4nehxul0s1mmn7z76l0@medicare.com",
+    "password": "$2b$10$ZxApq8aaHHYRyyneqRMp3.epLoBrbsOA13tVgQzPJQOKdBFf7myUG",
+    "role": "SPECIALIST",
+    "phoneNumber": "08056354409",
+    "isVerified": false,
+    "createdAt": "2026-03-26T21:19:49.162Z"
   }
 ]

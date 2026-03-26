@@ -1,6 +1,7 @@
 const express = require('express');
 const jsonDb = require('../utils/jsonDb');
 const { auth } = require('../utils/authMiddleware');
+const { queryTransactionStatus } = require('../utils/interswitch');
 const router = express.Router();
 
 // Book an appointment
@@ -48,9 +49,16 @@ router.get('/my', auth, (req, res) => {
     // Enrich with data
     const enriched = appointments.map(a => {
       const specialist = jsonDb.findById('specialists', a.specialistId);
-      const user = jsonDb.findById('users', specialist?.userId);
+      const specUser = jsonDb.findById('users', specialist?.userId);
+      const patientUser = jsonDb.findById('users', a.patientId);
       const slot = jsonDb.findById('slots', a.slotId);
-      return { ...a, specialist: { name: user?.name }, slot };
+      
+      return { 
+        ...a, 
+        specialist: { name: specUser?.name }, 
+        patient: { name: patientUser?.name },
+        slot 
+      };
     });
 
     res.json(enriched);
@@ -59,28 +67,72 @@ router.get('/my', auth, (req, res) => {
   }
 });
 
-// Mock Interswitch Payment Verification
-router.post('/verify-payment', auth, (req, res) => {
+// 1. Transaction Status Query (Interswitch Requirement)
+router.get('/verify-status/:txnRef', auth, (req, res) => {
+  try {
+    const { txnRef } = req.params;
+    const appointment = jsonDb.findOne('appointments', a => a.paymentReference === txnRef);
+    
+    if (!appointment) return res.status(404).json({ message: 'Transaction reference not found' });
+    
+    // SECURITY: Ensure user only accesses their own transaction data
+    if (appointment.patientId !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied: You can only query your own transactions' });
+    }
+    
+    res.json({
+      status: appointment.paymentStatus === 'paid' ? 'SUCCESS' : 'PENDING',
+      amount: 500000, // Amount in Kobo
+      transactionDate: appointment.updatedAt || appointment.createdAt,
+      merchantReference: txnRef
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Status query failed' });
+  }
+});
+
+// 2. Interswitch Payment Verification (Production Ready via Inquiry API)
+router.post('/verify-payment', auth, async (req, res) => {
   try {
     const { appointmentId, reference } = req.body;
 
     const appointment = jsonDb.findById('appointments', appointmentId);
     if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
 
+    // SECURITY: Ensure user is the owner of the appointment being verified
+    if (appointment.patientId !== req.user.id) {
+      return res.status(403).json({ message: 'Access denied: Unauthorized payment verification' });
+    }
+
+    // 1. Query the Interswitch Transaction Status API
+    console.log(`INTERSWITCH INQUIRY: Verifying transaction ${reference}...`);
+    const verification = await queryTransactionStatus(reference, appointment.amountInKobo || 500000);
+
+    if (verification.status !== "SUCCESS") {
+        return res.status(400).json({ 
+            message: 'Transaction verification failed at Interswitch',
+            details: verification.rawData
+        });
+    }
+
+    // 2. Update the database on success
     jsonDb.update('appointments', appointmentId, {
       paymentStatus: 'paid',
       status: 'confirmed',
       paymentReference: reference,
+      verificationSource: 'Interswitch Inquiry API',
       videoLink: `https://meet.mediconnect.africa/${appointmentId}`
     });
 
     res.json({
       success: true,
       message: 'Payment verified via Interswitch and appointment confirmed',
-      appointmentId
+      appointmentId,
+      reference
     });
   } catch (err) {
-    res.status(500).json({ message: 'Payment verification failed' });
+    console.error("Payment verification error:", err);
+    res.status(500).json({ message: err.message || 'Payment verification failed' });
   }
 });
 
