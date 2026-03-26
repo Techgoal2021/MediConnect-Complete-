@@ -29,11 +29,18 @@ const jsonDb = {
   findById: (collection, id) => readData(collection).find(item => item.id === id),
   findOne: (collection, predicate) => readData(collection).find(predicate),
   create: (collection, item) => {
-    const data = readData(collection);
-    const newItem = { id: require('crypto').randomUUID(), ...item, createdAt: new Date() };
-    data.push(newItem);
-    writeData(collection, data);
-    return newItem;
+    try {
+      const data = readData(collection);
+      const id = require('crypto').randomBytes(16).toString('hex');
+      const newItem = { id, ...item, createdAt: new Date() };
+      data.push(newItem);
+      writeData(collection, data);
+      console.log(`DB: Created new item in ${collection} with ID ${id}`);
+      return newItem;
+    } catch (err) {
+      console.error(`DB Error creating item in ${collection}:`, err);
+      throw err;
+    }
   },
   update: (collection, id, updates) => {
     const data = readData(collection);
@@ -48,7 +55,8 @@ const jsonDb = {
     const filtered = data.filter(item => item.id !== id);
     writeData(collection, filtered);
     return true;
-  }
+  },
+  writeData: (collection, data) => writeData(collection, data)
 };
 
 module.exports = jsonDb;

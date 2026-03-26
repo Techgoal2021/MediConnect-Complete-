@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 @dataclass
@@ -11,13 +11,13 @@ class Specialist:
 
     _MAX_CONSULTATIONS = 10000
 
-    def pass_consultations_threshold(self, threshold: int = 50) -> bool:
+    def pass_consultations_threshold(self, threshold: int = 1) -> bool:
         """Check if number of consultations is over or equals a minimum
         threshold.
 
         Args:
             threshold (int, optional): Minimum number of consultations.
-            Defaults to 50.
+            Defaults to 1 for democracy.
 
         Returns:
             bool
@@ -30,7 +30,7 @@ class Specialist:
         Returns:
             list: Ratings from four weeks ago till now.
         """
-        today = datetime.today()
+        today = datetime.now(timezone.utc)
         four_weeks_ago = today - timedelta(weeks=4)
         return [rating for rating in self.ratings if rating[1] >= four_weeks_ago]
 

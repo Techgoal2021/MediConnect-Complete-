@@ -9,7 +9,7 @@ const ENVIRONMENT = "local"; // "local" or "production"
 
 const CONFIG = {
   local: {
-    API_BASE_URL: "http://localhost:5000/api"
+    API_BASE_URL: "http://localhost:8080/api"
   },
   production: {
     // Replace with your actual Render/Railway backend URL

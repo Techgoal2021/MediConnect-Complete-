@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import API_BASE_URL from "../config/api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  
+  // Aggressive cleanup for demo stand
+  React.useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Clear any previous session first
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

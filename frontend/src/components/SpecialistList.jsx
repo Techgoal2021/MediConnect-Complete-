@@ -8,9 +8,18 @@ import DepartmentGrid from "./DepartmentGrid";
 const SpecialistList = () => {
   const [specialists, setSpecialists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [symptoms, setSymptoms] = useState("");
+  const [recommendation, setRecommendation] = useState(null);
+  const [recLoading, setRecLoading] = useState(false);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const filterBy = queryParams.get("specialization");
+
+  useEffect(() => {
+    if (!loading) {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [loading, filterBy]);
 
   useEffect(() => {
     const fetchSpecialists = async () => {
@@ -32,32 +41,6 @@ const SpecialistList = () => {
     fetchSpecialists();
   }, [filterBy]);
 
-  if (loading) return (
-    <div className="flex justify-center items-center py-40">
-      <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-    </div>
-  );
-
-  // If no specialization selected, show the Department Grid as the entrance
-  if (!filterBy) {
-    return (
-      <div className="pt-20">
-        <DepartmentGrid title="Select a Department" showHeader={true} />
-        {/* Optional: Add a "Browse All Specialists" link below the grid */}
-        <div className="container mx-auto px-6 lg:px-20 pb-24 text-center">
-           <Link to="/specialists?specialization=all" className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 hover:text-primary transition border-b border-slate-200 pb-2">Or Browse All Verified Experts ⟶</Link>
-        </div>
-      </div>
-    );
-  }
-
-  // Handle "Browse All" edge case
-  const displayedSpecialists = filterBy === "all" ? specialists.slice(0, 12) : specialists;
-
-  const [symptoms, setSymptoms] = useState("");
-  const [recommendation, setRecommendation] = useState(null);
-  const [recLoading, setRecLoading] = useState(false);
-
   const handleRecommend = async (e) => {
     e.preventDefault();
     if (!symptoms.trim()) return;
@@ -76,6 +59,27 @@ const SpecialistList = () => {
       setRecLoading(false);
     }
   };
+
+  if (loading) return (
+    <div className="flex justify-center items-center py-40">
+      <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+
+  // If no specialization selected, show the Department Grid as the entrance
+  if (!filterBy) {
+    return (
+      <div className="pt-20">
+        <DepartmentGrid title="Select a Department" showHeader={true} />
+        <div className="container mx-auto px-6 lg:px-20 pb-24 text-center">
+           <Link to="/specialists?specialization=all" className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 hover:text-primary transition border-b border-slate-200 pb-2">Or Browse All Verified Experts ⟶</Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle "Browse All" edge case
+  const displayedSpecialists = filterBy === "all" ? specialists.slice(0, 12) : specialists;
 
   return (
     <section className="py-24 lg:py-32 bg-medical">
@@ -157,7 +161,46 @@ const SpecialistList = () => {
                  <Link to={`/specialist/${s.id}`} className="text-2xl font-black text-navy hover:text-primary transition tracking-tighter mb-2 block">
                    {s.user?.name}
                  </Link>
-                 <span className="text-primary font-black uppercase text-[10px] tracking-[0.2em] mb-6 block bg-primary/5 px-4 py-1 rounded-full">{s.specialization}</span>
+                 <div className="flex flex-wrap justify-center gap-2 mb-6">
+                    <span className="text-primary font-black uppercase text-[10px] tracking-[0.2em] bg-primary/5 px-4 py-1 rounded-full">{s.specialization}</span>
+                    {s.trust_score !== null ? (
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        padding: '6px 14px',
+                        borderRadius: '9999px',
+                        fontSize: '10px',
+                        fontWeight: '900',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        border: '2px solid #34d399',
+                        backgroundColor: '#ecfdf5',
+                        color: '#065f46',
+                        boxShadow: '0 4px 12px rgba(52, 211, 153, 0.2)',
+                        gap: '6px'
+                      }}>
+                        <span style={{fontSize: '12px'}}>🛡️</span> {s.trust_score}% Trust
+                      </span>
+                    ) : (
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        padding: '6px 14px',
+                        borderRadius: '9999px',
+                        fontSize: '10px',
+                        fontWeight: '900',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        border: '2px solid #818cf8',
+                        backgroundColor: '#eef2ff',
+                        color: '#3730a3',
+                        boxShadow: '0 4px 12px rgba(129, 140, 248, 0.2)',
+                        gap: '6px'
+                      }}>
+                         <span style={{fontSize: '12px'}}>🛡️</span> Pending AI Verification
+                      </span>
+                    )}
+                 </div>
               </div>
 
               {/* Bio */}
@@ -168,7 +211,7 @@ const SpecialistList = () => {
                  <div className="flex flex-col space-y-4 pt-8 border-t border-slate-50">
                     <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest">
                        <span className="text-slate-400">Consultation Fee</span>
-                       <span className="text-navy">₦{s.consultationFee.toLocaleString()}</span>
+                       <span className="text-navy">₦{s.consultationFee?.toLocaleString() || "0"}</span>
                     </div>
                     <Link 
                       to={`/specialist/${s.id}`} 

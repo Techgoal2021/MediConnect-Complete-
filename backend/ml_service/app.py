@@ -6,6 +6,11 @@ from recommendations import recommend_specialist
 app = Flask(__name__)
 
 
+@app.route("/", methods=["GET", "HEAD"])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
+
+
 @app.route("/recommend", methods=["POST"])
 def recommend():
     data = request.get_json()
@@ -28,13 +33,48 @@ def get_rating():
     )
 
     for star, date_str in ratings:
-        doctor.ratings.append((star, datetime.fromisoformat(date_str)))
+        doctor.ratings.append((star, datetime.fromisoformat(date_str.replace('Z', '+00:00'))))
 
     score = doctor.calculate_trust_score()
     label = doctor.get_trust_label()
 
-    return jsonify({"trust_score": score, "label": label})
+    return jsonify({"trust_score": score, "trust_label": label})
+
+
+@app.route("/specialist/ratings/batch", methods=["POST"])
+def get_ratings_batch():
+    try:
+        data = request.get_json()
+        specialists_data = data.get("specialists", [])
+        results = []
+
+        for s in specialists_data:
+            name = s.get("name")
+            specialisation = s.get("specialisation")
+            consultations = s.get("total_consultations", 0)
+            ratings = s.get("ratings", [])
+
+            doctor = Specialist(
+                name=name, specialization=specialisation,
+                total_consultations=consultations
+            )
+
+            for star, date_str in ratings:
+                doctor.ratings.append((star, datetime.fromisoformat(date_str.replace('Z', '+00:00'))))
+
+            score = doctor.calculate_trust_score()
+            label = doctor.get_trust_label()
+            
+            results.append({
+                "specialistId": s.get("id"),
+                "trust_score": score,
+                "trust_label": label
+            })
+
+        return jsonify({"success": True, "results": results})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=True, host="0.0.0.0", port=5001)

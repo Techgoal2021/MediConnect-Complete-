@@ -9,9 +9,13 @@ import Register from "./Pages/Register";
 import SpecialistDetails from "./Pages/SpecialistDetails";
 import Dashboard from "./Pages/Dashboard";
 
+import ScrollToTop from "./components/ScrollToTop";
+
 function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
@@ -21,8 +25,10 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="specialist/:id" element={<SpecialistDetails />} />
         <Route path="appointments" element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard />} />
       </Route>
     </Routes>
+    </>
   );
 }
 

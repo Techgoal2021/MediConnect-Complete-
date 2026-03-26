@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import API_BASE_URL from "../config/api";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,18 +12,26 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  
+  // Aggressive cleanup for demo stand
+  React.useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Clear any previous session first
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Registration failed");
-      navigate("/login");
+      window.location.href = "/login";
     } catch (err) {
       setError(err.message);
     }

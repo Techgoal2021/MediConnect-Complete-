@@ -9,14 +9,15 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password, role, phoneNumber, bvn } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Missing required fields' });
-    }
+    console.log("Registration attempt:", { name, email, role });
 
-    // Check if user exists
+    // Check if user exists (case-insensitive)
     const users = jsonDb.findAll('users');
-    if (users.find(u => u.email === email)) {
-      return res.status(400).json({ message: 'User already exists' });
+    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+      console.log("Registration failed: User already exists", email);
+      return res.status(400).json({ 
+        message: 'This email is already registered. Please try logging in or use a different email.' 
+      });
     }
 
     // Hash password
@@ -32,6 +33,8 @@ router.post('/register', async (req, res) => {
       bvn,
       isVerified: false
     });
+
+    console.log("User created successfully:", user.id);
 
     // If specialist, create profile
     if (role === 'specialist') {
@@ -56,7 +59,7 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = jsonDb.findOne('users', u => u.email === email);
+    const user = jsonDb.findOne('users', u => u.email.toLowerCase() === email.toLowerCase());
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -83,7 +86,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Mock Identity Verification (Interswitch API Simulator)
+// Mock Identity Verification (Interswitch API Marketplace Simulator)
 router.post('/verify-identity', async (req, res) => {
   try {
     const { bvn, userId } = req.body;
@@ -91,14 +94,23 @@ router.post('/verify-identity', async (req, res) => {
     const user = jsonDb.findById('users', userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    jsonDb.update('users', userId, { isVerified: true });
+    // SIMULATED LECTURE REQUIREMENT: Interswitch API Marketplace Bearer Token
+    console.log(`INTERSWITCH MARKETPLACE: Authenticating Project for BVN lookup...`);
+    const marketplaceToken = `mkt_bearer_${Math.random().toString(36).substr(2)}`;
+    console.log(`INTERSWITCH MARKETPLACE: Bearer Token assigned: ${marketplaceToken}`);
+
+    jsonDb.update('users', userId, { 
+      isVerified: true,
+      marketplaceToken: marketplaceToken // Simulating the API link
+    });
 
     res.json({
       success: true,
       message: 'Identity verified successfully with Interswitch BVN API',
       data: {
         firstName: user.name.split(' ')[0],
-        status: 'Verified'
+        status: 'Verified',
+        token: marketplaceToken
       }
     });
   } catch (err) {

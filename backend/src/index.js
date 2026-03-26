@@ -3,7 +3,7 @@ const express = require('express');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // Manual CORS middleware
 app.use((req, res, next) => {
@@ -23,6 +23,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/specialists', require('./routes/specialists'));
 app.use('/api/appointments', require('./routes/appointments'));
+app.use('/api/payments', require('./routes/payments'));
 app.use('/api/reviews', require('./routes/reviews'));
 
 app.get('/', (req, res) => {

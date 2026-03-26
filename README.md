@@ -11,6 +11,44 @@
 - **Smart Verification (Trust Scores)**: Real-time calculation of specialist reliability using historical ratings and consultation volume.
 - **Sectors Served**: This solution directly addresses **Health (H)** and **Payment (P)** sectors of the Buildathon.
 
+## 👥 Team Contributions & Roles
+
+### 💻 Frontend Engineering (Lead: Egbujor Dominic Chikodi)
+- **Tech Stack**: React.js, Tailwind CSS, Vite.
+- **Accomplishments**: 
+    - Developed the premium **"Medcare" Design System** using adaptive HSL palettes, glassmorphism, and custom UI components.
+    - Implemented a **smooth, responsive appointment booking flow** with real-time feedback and state-persistent navigation.
+    - Created the **"Master Switch" configuration** for seamless environment state management between local and production.
+    - Optimized **Mobile Navigation & Accessibility**, ensuring a first-class experience for users on any device.
+    - Engineered **Skeleton Loading states** to enhance perceived performance during complex Interswitch payment handshakes.
+
+### ⚙️ Backend & Infrastructure (Lead: John Sowemimo)
+- **Tech Stack**: Node.js, Express, JWT.
+- **Accomplishments**:
+    - Architected the core **Consultation Logic** and secure Specialist management endpoints.
+    - Engineered a high-fidelity **Interswitch WebPay Simulation** for reliable transaction verification.
+    - Designed the **Low-Data USSD Mode**, enabling offline healthcare access via simulated transactional codes.
+    - Implemented **SHA-512 Secure Hash generation** for full compliance with Interswitch technical requirements.
+    - Hardened the API against **Broken Object Level Authorization (BOLA)** to ensure patient data isolation.
+    - Developed a **JSON-based persistent storage layer** for rapid synchronization and low-latency database operations.
+
+### 🧬 Data Science & AI (Lead: Ernest Tashemi)
+- **Tech Stack**: Python, Flask, Pandas.
+- **Accomplishments**:
+    - Developed the **Doctor Trust Rating System**: A complex algorithm that scores specialists from 0–100 based on patient reviews and ratings, displayed as "Trusted" or "Top Rated" labels in the UI.
+    - Built the **Symptom-to-Specialist Recommendation Engine**: An NLP-driven model that suggests the correct medical department based on raw patient symptom descriptions.
+    - Successfully integrated the Flask-based ML services into the Node.js backend to ensure high-speed, real-time data flow.
+
+### 🛡️ Cybersecurity & Hardening (Lead: Uche Onyemali)
+- **Focus**: Vulnerability Assessment & Compliance.
+- **Accomplishments**:
+    - **Reconnaissance & Asset Discovery**: Conducted strategic information gathering using **OWASP** methodology and **nmap** to map data flow and secure ports (Verified Port 8080, 5001, and 5173 exposure).
+    - **Vulnerability Scanning**: Utilized **Nessus** to conduct deep scans and manual code audits. Identified and patched **Broken Object Level Authorization (BOLA)** vulnerabilities in payment verification routes.
+    - **Authentication Hardening**: Verified password hashing logic (bcrypt) and tested the platform via **Auth0** patterns to ensure strict role-based isolation (Confirmed that patients cannot access other patients' private data).
+    - **Reporting**: Provided a comprehensive [Vulnerability and Risk Report](file:///Users/user/.gemini/antigravity/scratch/SECURITY_REPORT.md) indicating architectural recommendations for long-term platform stability (Final Audit Status: SUCCESS 🛡️).
+
+---
+
 ## 🔐 Test Credentials
 
 For judge review and testing, please use the following verified credentials:
@@ -33,20 +71,28 @@ For judge review and testing, please use the following verified credentials:
 Because we have optimized the project for submission, follow these steps to run it locally:
 
 ### 1. Backend Setup
-1. Open a terminal in the `backend/` folder.
-2. Run **`npm install`** (to restore dependencies).
-3. Run **`npm start`**.
-   -   *The backend will run on Port 5000.*
+```bash
+cd backend
+npm install
+npm start
+```
+- *Server runs on Port 8080*
 
 ### 2. Frontend Setup
-1. Open a second terminal in the `frontend/` folder.
-2. Run **`npm install`**.
-3. Run **`npm run dev`**.
-### 3. ML Service Setup (AI Recommendations)
-1. Open a third terminal in the `backend/ml_service/` folder.
-2. Run **`pip install -r requirements.txt`**.
-3. Run **`python app.py`**.
-   -   *The AI engine will run on Port 5001.*
+```bash
+cd frontend
+npm install
+npm run dev
+```
+- *App runs on Port 5173*
+
+### 3. ML Service Setup (AI Engine)
+```bash
+cd backend/ml_service
+pip install -r requirements.txt
+python app.py
+```
+- *AI Engine runs on Port 5001*
 
 ---
 
