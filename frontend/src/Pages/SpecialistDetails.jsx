@@ -270,8 +270,16 @@ const SpecialistDetails = () => {
                    </div>
                    <div className="text-center md:text-left pt-4">
                       <h2 className="text-4xl lg:text-5xl font-serif font-black text-navy leading-tight mb-4">{specialist.user?.name}</h2>
-                      <div className="inline-block bg-primary/5 text-primary px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-6">
-                        {specialist.specialization}
+                      <div className="flex items-center space-x-3 mb-6">
+                        <div className="inline-block bg-primary/5 text-primary px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
+                          {specialist.specialization}
+                        </div>
+                        {specialist.trust_score && (
+                          <div className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${specialist.trust_score > 70 ? 'bg-green-50 text-green-600 border-green-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                            <span className="mr-2">🛡️ Trust Score:</span>
+                            {specialist.trust_score}% • {specialist.trust_label}
+                          </div>
+                        )}
                       </div>
                       <p className="text-slate-500 font-medium leading-[1.8] text-lg italic">
                         "{specialist.bio}"
@@ -298,8 +306,8 @@ const SpecialistDetails = () => {
                      <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-1">Patients</div>
                   </div>
                   <div className="border-l-2 border-primary/20 pl-6">
-                     <div className="text-2xl font-black text-navy">4.9</div>
-                     <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-1">Rating</div>
+                     <div className="text-2xl font-black text-navy">{specialist.trust_score || '4.9'}</div>
+                     <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-1">{specialist.trust_score ? 'Trust %' : 'Rating'}</div>
                   </div>
                   <div className="border-l-2 border-primary/20 pl-6">
                      <div className="text-2xl font-black text-navy">Verf.</div>

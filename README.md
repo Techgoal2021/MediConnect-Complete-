@@ -7,6 +7,8 @@
 - **36+ Verified Specialists**: A vast network of seeded medical professionals across Cardiology, Pediatrics, Neurology, and more.
 - **Interswitch WebPay Integration**: High-fidelity simulation of the Interswitch gateway, including real-time transaction verification.
 - **"Pay with USSD" (Offline Mode)**: A groundbreaking accessibility feature allowing patients with low data to book appointments via transactional USSD codes.
+- **AI-Powered Specialist Recommendations**: A Flask-based ML engine that recommends the correct medical department based on a patient's symptoms.
+- **Smart Verification (Trust Scores)**: Real-time calculation of specialist reliability using historical ratings and consultation volume.
 - **Sectors Served**: This solution directly addresses **Health (H)** and **Payment (P)** sectors of the Buildathon.
 
 ## 🔐 Test Credentials
@@ -40,7 +42,11 @@ Because we have optimized the project for submission, follow these steps to run 
 1. Open a second terminal in the `frontend/` folder.
 2. Run **`npm install`**.
 3. Run **`npm run dev`**.
-   -   *The frontend will run on Port 5173.*
+### 3. ML Service Setup (AI Recommendations)
+1. Open a third terminal in the `backend/ml_service/` folder.
+2. Run **`pip install -r requirements.txt`**.
+3. Run **`python app.py`**.
+   -   *The AI engine will run on Port 5001.*
 
 ---
 

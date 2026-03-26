@@ -54,9 +54,85 @@ const SpecialistList = () => {
   // Handle "Browse All" edge case
   const displayedSpecialists = filterBy === "all" ? specialists.slice(0, 12) : specialists;
 
+  const [symptoms, setSymptoms] = useState("");
+  const [recommendation, setRecommendation] = useState(null);
+  const [recLoading, setRecLoading] = useState(false);
+
+  const handleRecommend = async (e) => {
+    e.preventDefault();
+    if (!symptoms.trim()) return;
+    setRecLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/specialists/recommend`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symptoms })
+      });
+      const data = await res.json();
+      setRecommendation(data.specialist);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setRecLoading(false);
+    }
+  };
+
   return (
     <section className="py-24 lg:py-32 bg-medical">
       <div className="container mx-auto px-6 lg:px-20">
+        
+        {/* ML Symptom Checker Section */}
+        <div className="card-medcare p-10 lg:p-16 mb-24 bg-navy text-white overflow-hidden relative group">
+           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-primary/20 transition duration-700"></div>
+           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
+                 <h5 className="text-primary font-black tracking-[0.4em] uppercase mb-4 text-[10px]">AI-Powered Diagnosis</h5>
+                 <h2 className="text-3xl lg:text-4xl font-serif font-black mb-6 leading-tight">Not sure which <span className="text-primary italic">specialist</span> you need?</h2>
+                 <p className="text-white/60 font-medium mb-10 leading-relaxed text-sm">Describe your symptoms below, and our MediConnect ML engine will recommend the best department for your care.</p>
+                 
+                 <form onSubmit={handleRecommend} className="relative">
+                    <input 
+                      type="text" 
+                      value={symptoms}
+                      onChange={(e) => setSymptoms(e.target.value)}
+                      placeholder="e.g. I have persistent chest pain and shortness of breath" 
+                      className="w-full bg-white/10 border border-white/10 px-8 py-5 rounded-sm text-sm font-bold focus:bg-white/20 focus:outline-none transition-all placeholder:text-white/30 pr-32"
+                    />
+                    <button 
+                      type="submit"
+                      disabled={recLoading}
+                      className="absolute right-2 top-2 bottom-2 bg-primary text-white px-6 font-black uppercase text-[10px] tracking-widest hover:bg-white hover:text-navy transition duration-500 disabled:bg-white/10"
+                    >
+                      {recLoading ? "Analyzing..." : "Diagnose ⟶"}
+                    </button>
+                 </form>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 p-10 rounded-sm relative min-h-[200px] flex flex-col justify-center text-center">
+                 {recommendation ? (
+                    <div className="animate-fade-in">
+                        <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                           <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">Recommended Department</h4>
+                        <div className="text-3xl font-black text-white tracking-tighter mb-6">{recommendation}</div>
+                        <Link 
+                           to={`/specialists?specialization=${recommendation.split(' ')[0]}`}
+                           className="text-primary font-black uppercase text-[10px] tracking-widest border-b border-primary/30 pb-1 hover:text-white hover:border-white transition"
+                        >
+                           View {recommendation} Experts ⟶
+                        </Link>
+                    </div>
+                 ) : (
+                    <div className="opacity-40 flex flex-col items-center">
+                        <svg className="w-12 h-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                        <p className="text-xs font-bold uppercase tracking-[0.2em]">Awaiting Symptoms...</p>
+                    </div>
+                 )}
+              </div>
+           </div>
+        </div>
+
         <div className="text-center mb-16 lg:mb-24 max-w-2xl mx-auto">
           <h5 className="text-primary font-black tracking-[0.4em] uppercase mb-4 text-xs">Medical Specialists</h5>
           <h2 className="text-4xl lg:text-5xl font-serif font-black text-navy mb-6 leading-tight">

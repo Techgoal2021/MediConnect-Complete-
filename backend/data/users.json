@@ -376,5 +376,25 @@
     "phoneNumber": "08157060736",
     "isVerified": false,
     "createdAt": "2026-03-25T16:40:45.300Z"
+  },
+  {
+    "id": "88a7dcec-f399-4038-9ef2-757318303af4",
+    "name": "John Sowemimo",
+    "email": "soj_samsoon@yahoo.com",
+    "password": "$2b$10$gRGN5PzEKR6dwaJx6g7MD.LQJojw1/LpbAtagdj0PTile13RxY7de",
+    "role": "patient",
+    "phoneNumber": "08029078114",
+    "isVerified": false,
+    "createdAt": "2026-03-26T01:14:52.713Z"
+  },
+  {
+    "id": "d22779d2-a688-41ea-a48e-5be28b21dea8",
+    "name": "Ernest Tashemi",
+    "email": "tashemiernest@gmail.com",
+    "password": "$2b$10$PuwnzeayiM24XUhgU70kyeACSmjFrnfpxUtfDMdBUTzBDpfitCZzC",
+    "role": "patient",
+    "phoneNumber": "07072083788",
+    "isVerified": false,
+    "createdAt": "2026-03-26T01:53:07.090Z"
   }
 ]

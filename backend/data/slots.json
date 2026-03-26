@@ -3,15 +3,17 @@
     "id": "3c4e101f-4fe9-4157-b2bb-2a79e5661a92",
     "specialistId": "2e7c29d9-a421-4695-a2dd-5be08b12d0c4",
     "startTime": "2026-03-26T09:00:00.000Z",
-    "isBooked": false,
-    "createdAt": "2026-03-25T16:25:36.595Z"
+    "isBooked": true,
+    "createdAt": "2026-03-25T16:25:36.595Z",
+    "updatedAt": "2026-03-26T07:59:04.552Z"
   },
   {
     "id": "fb20870a-0127-4a63-81de-de0ec0eec20c",
     "specialistId": "2e7c29d9-a421-4695-a2dd-5be08b12d0c4",
     "startTime": "2026-03-27T10:00:00.000Z",
-    "isBooked": false,
-    "createdAt": "2026-03-25T16:25:36.599Z"
+    "isBooked": true,
+    "createdAt": "2026-03-25T16:25:36.599Z",
+    "updatedAt": "2026-03-26T08:21:38.357Z"
   },
   {
     "id": "3e20f5d2-b5f2-4c38-8a23-d1cd9d5eaa4f",
@@ -24,8 +26,9 @@
     "id": "6891e255-54b1-4681-8e9f-11e34bd3ed02",
     "specialistId": "2e7c29d9-a421-4695-a2dd-5be08b12d0c4",
     "startTime": "2026-03-29T12:00:00.000Z",
-    "isBooked": false,
-    "createdAt": "2026-03-25T16:25:36.607Z"
+    "isBooked": true,
+    "createdAt": "2026-03-25T16:25:36.607Z",
+    "updatedAt": "2026-03-26T08:18:37.159Z"
   },
   {
     "id": "3d35a7bc-57ba-420b-b06a-09e15c0b7566",
@@ -52,8 +55,9 @@
     "id": "ccccf5ed-b8ae-4233-9b50-c3d8a10f858c",
     "specialistId": "c42b7a13-32df-4546-acc5-32dfbe6a601e",
     "startTime": "2026-03-29T12:00:00.000Z",
-    "isBooked": false,
-    "createdAt": "2026-03-25T16:25:36.615Z"
+    "isBooked": true,
+    "createdAt": "2026-03-25T16:25:36.615Z",
+    "updatedAt": "2026-03-26T01:54:09.039Z"
   },
   {
     "id": "16a32728-32ac-459d-a721-949498f15899",
@@ -373,8 +377,9 @@
     "id": "7d07e79e-e731-45fa-9018-ae4c07e0db01",
     "specialistId": "413b2ec8-acbd-4ba3-9b7d-b46800f9ee0c",
     "startTime": "2026-03-26T09:00:00.000Z",
-    "isBooked": false,
-    "createdAt": "2026-03-25T16:25:36.731Z"
+    "isBooked": true,
+    "createdAt": "2026-03-25T16:25:36.731Z",
+    "updatedAt": "2026-03-26T07:59:50.076Z"
   },
   {
     "id": "fb9102b1-7f1b-49f7-a5d2-49e328003f18",
@@ -716,8 +721,9 @@
     "id": "b06a815c-8e34-4246-9344-37e7926b2be6",
     "specialistId": "df6cffc1-e636-4398-b7f6-ea7a91eeb061",
     "startTime": "2026-03-27T10:00:00.000Z",
-    "isBooked": false,
-    "createdAt": "2026-03-25T16:25:37.024Z"
+    "isBooked": true,
+    "createdAt": "2026-03-25T16:25:37.024Z",
+    "updatedAt": "2026-03-26T08:22:45.331Z"
   },
   {
     "id": "14a0b905-e95f-4e51-9330-5c4591563b9c",
@@ -793,8 +799,9 @@
     "id": "55ff6fe4-26ce-4078-9935-7061a75cb6ae",
     "specialistId": "dddad3dc-824b-4140-881a-50482eb0b678",
     "startTime": "2026-03-26T09:00:00.000Z",
-    "isBooked": false,
-    "createdAt": "2026-03-25T16:25:37.050Z"
+    "isBooked": true,
+    "createdAt": "2026-03-25T16:25:37.050Z",
+    "updatedAt": "2026-03-26T01:15:39.247Z"
   },
   {
     "id": "50f4f19b-98b4-4457-b716-d1365baa91ce",
