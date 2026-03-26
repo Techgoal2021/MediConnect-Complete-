@@ -59,4 +59,19 @@ router.post('/slots', auth, checkRole('specialist'), (req, res) => {
   }
 });
 
+// Recommend a specislist based on symptoms
+router.post('/recommend', async (req, res) => {
+  try {
+    const { symptoms } = req.body;
+    const response = await fetch('https://127.0.0.1:5000/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ symptoms })
+    });
+    const data = await response.json();
+  } catch (err) {
+    res.status(500).json({ message: 'Could not reach recommendation service' })
+  }
+});
+
 module.exports = router;
