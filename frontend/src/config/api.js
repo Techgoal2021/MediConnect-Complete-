@@ -5,4 +5,4 @@ export const API_CONFIG = {
   AI_URL: `${API_BASE_URL}/api/ai`
 };
 
-export default API_CONFIG;
+export default API_CONFIG.BASE_URL;
