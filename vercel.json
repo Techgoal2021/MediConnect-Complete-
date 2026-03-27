@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "mediconnect-fullstack",
+  "name": "mediconnect-all-in-one",
   "builds": [
     {
       "src": "backend/src/index.js",
@@ -11,9 +11,9 @@
       "use": "@vercel/python"
     },
     {
-      "src": "package.json",
+      "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "frontend/dist" }
+      "config": { "distDir": "dist" }
     }
   ],
   "routes": [
@@ -26,9 +26,7 @@
       "dest": "backend/src/index.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/$1",
-      "check": true
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
