@@ -98,13 +98,12 @@ python app.py
 
 ## 🌍 Switching to Production (For Judges)
 
-We have centralized all API communication for easy deployment. To point the Frontend to a live hosted Backend (e.g., on Render):
+We have optimized the project for seamless deployment. The application now uses an **Automatic Master Switch**:
 
-1.  Open **`frontend/src/config/api.js`**.
-2.  Change `const ENVIRONMENT = "local"` to **`"production"`**.
-3.  Update the `production.API_BASE_URL` with your live Render URL.
+1.  **Local Dev**: Connects to `localhost:8080` and `localhost:5001` automatically.
+2.  **Production**: Automatically detects the Vercel/Render environment and uses the `VITE_API_BASE_URL` environment variable.
 
-This "Master Switch" pattern ensures your project works flawlessly in any environment.
+No manual code changes are required to go live! Just set your environment variables in the Vercel/Render dashboard as described in the [Deployment Guide](file:///Users/user/.gemini/antigravity/scratch/DEPLOYMENT_GUIDE.md).
 
 ## 🏗️ Production Readiness & Scalability
 

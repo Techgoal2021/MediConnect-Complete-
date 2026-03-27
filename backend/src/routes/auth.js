@@ -13,8 +13,10 @@ router.post('/register', async (req, res) => {
 
     // Check if user exists (case-insensitive)
     const users = await mongoDbAdapter.findAll('users');
-    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-      console.log("Registration failed: User already exists", email);
+    const existingUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    
+    if (existingUser) {
+      console.warn(`[AUTH] Registration failed: email ${email} already exists in DB.`);
       return res.status(400).json({ 
         message: 'This email is already registered. Please try logging in or use a different email.' 
       });
@@ -60,10 +62,16 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     const user = await mongoDbAdapter.findOne('users', u => u.email.toLowerCase() === email.toLowerCase());
-    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
-
+    if (!user) {
+      console.warn(`[AUTH] Login failed: User not found for email ${email}`);
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+    
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+    if (!isMatch) {
+      console.warn(`[AUTH] Login failed: Password mismatch for ${email}`);
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
 
     const token = jwt.sign(
       { id: user.id, role: user.role },
@@ -115,6 +123,28 @@ router.post('/verify-identity', async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: 'Verification failed' });
+  }
+});
+
+// Reset Password (Demo Flow)
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Find user (case-insensitive)
+    const user = await mongoDbAdapter.findOne('users', u => u.email.toLowerCase() === email.toLowerCase());
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Update password
+    await mongoDbAdapter.update('users', user.id, { password: hashedPassword });
+
+    res.json({ success: true, message: 'Password reset successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Reset failed' });
   }
 });
 

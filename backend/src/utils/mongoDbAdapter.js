@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
 const User = require('../models/User');
 const Specialist = require('../models/Specialist');
 const Appointment = require('../models/Appointment');
 const Review = require('../models/Review');
 const Slot = require('../models/Slot');
+const crypto = require('crypto');
 
 const models = {
   users: User,
@@ -14,61 +14,50 @@ const models = {
 };
 
 const mongoDbAdapter = {
+  // Get all records in a collection
   findAll: async (collection) => {
-    return await models[collection].find({});
+    return await models[collection].find({}).lean().exec();
   },
+
+  // Find by the custom 'id' field (NOT MongoDB _id)
   findById: async (collection, id) => {
-    return await models[collection].findOne({ id });
+    if (!id) return null;
+    return await models[collection].findOne({ id: String(id) }).lean().exec();
   },
-  findOne: async (collection, predicate) => {
-    const data = await models[collection].find({});
-    return data.find(predicate);
+
+  // Find one by a query function (old pattern) or a Mongoose query object
+  findOne: async (collection, query) => {
+    if (typeof query === 'function') {
+      const data = await models[collection].find({}).lean().exec();
+      return data.find(query) || null;
+    }
+    return await models[collection].findOne(query).lean().exec();
   },
+
+  // Create a new record with a generated custom id
   create: async (collection, item) => {
-    try {
-      const Model = models[collection];
-      const id = require('crypto').randomBytes(16).toString('hex');
-      const newItem = new Model({ id, ...item });
-      await newItem.save();
-      console.log(`MongoDB: Created new item in ${collection} with ID ${id}`);
-      return newItem;
-    } catch (err) {
-      console.error(`MongoDB Error creating item in ${collection}:`, err);
-      throw err;
-    }
+    const Model = models[collection];
+    const id = crypto.randomBytes(16).toString('hex');
+    const newItem = new Model({ id, ...item });
+    await newItem.save();
+    // Return a plain object like the others
+    return { id, ...item, _id: newItem._id };
   },
+
+  // Update using the custom 'id' field
   update: async (collection, id, updates) => {
-    try {
-      const item = await models[collection].findOneAndUpdate(
-        { id },
-        { ...updates, updatedAt: new Date() },
-        { new: true }
-      );
-      return item;
-    } catch (err) {
-      console.error(`MongoDB Error updating item in ${collection}:`, err);
-      throw err;
-    }
+    if (!id) return null;
+    return await models[collection].findOneAndUpdate(
+      { id: String(id) },
+      { $set: updates },
+      { new: true }
+    ).lean().exec();
   },
+
+  // Delete using the custom 'id' field
   delete: async (collection, id) => {
-    try {
-      await models[collection].deleteOne({ id });
-      return true;
-    } catch (err) {
-      console.error(`MongoDB Error deleting item from ${collection}:`, err);
-      throw err;
-    }
-  },
-  // Custom method for batch writing if needed
-  writeData: async (collection, data) => {
-    try {
-      await models[collection].deleteMany({});
-      await models[collection].insertMany(data);
-      return true;
-    } catch (err) {
-      console.error(`MongoDB Error batch writing to ${collection}:`, err);
-      throw err;
-    }
+    if (!id) return null;
+    return await models[collection].findOneAndDelete({ id: String(id) }).lean().exec();
   }
 };
 

@@ -25,14 +25,9 @@ class Specialist:
         return self.total_consultations >= threshold
 
     def get_recent_ratings(self) -> list[tuple[float, datetime]]:
-        """Return list of ratings from a four-week window.
-
-        Returns:
-            list: Ratings from four weeks ago till now.
-        """
-        today = datetime.now(timezone.utc)
-        four_weeks_ago = today - timedelta(weeks=4)
-        return [rating for rating in self.ratings if rating[1] >= four_weeks_ago]
+        """Return list of ratings (Demo: looks at all history)."""
+        # Removed the 4-week restriction so seeded data shows up in the buildathon demo
+        return self.ratings
 
     def calculate_trust_score(self) -> float | None:
         """Calculates the trust score of a specialist

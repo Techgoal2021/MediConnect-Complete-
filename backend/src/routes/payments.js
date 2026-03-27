@@ -21,8 +21,10 @@ router.post('/initiate', auth, async (req, res) => {
         // Generate a unique Transaction Reference
         const txnRef = `MED-${appointmentId.substr(-4).toUpperCase()}-${Date.now()}`;
         
-        // Use the configured Callback URL
-        const callbackUrl = process.env.INTERSWITCH_CALLBACK_URL || "http://localhost:5173/appointments";
+        // Use the configured Callback URL or Honor the Referer (dynamic port support)
+        const referer = req.headers.referer || "http://localhost:5173/";
+        const baseUrl = referer.endsWith('/') ? referer.slice(0, -1) : referer;
+        const callbackUrl = process.env.INTERSWITCH_CALLBACK_URL || `${baseUrl}/appointments`;
 
         // Generate the secure SHA-512 Hash
         const hash = generateSHA512Hash(txnRef, amountInKobo, callbackUrl);

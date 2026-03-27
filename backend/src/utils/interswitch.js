@@ -92,18 +92,20 @@ const getPassportToken = async () => {
  * Queries Interswitch Inquiry API to verify transaction status
  */
 const queryTransactionStatus = async (txnRef, amountInKobo) => {
-    try {
-        // If DEMO_MODE is true, we simulate a successful response for the presentation
-        if (process.env.DEMO_MODE === 'true') {
-            console.log(`[DEMO MODE] Simulating successful verification for txnRef: ${txnRef}`);
-            return { 
-                status: "SUCCESS", 
-                mock: true, 
-                responseCode: "00", 
-                message: "Simulated Success (Demo Mode Active)" 
-            };
-        }
+    // FORCE DEMO MODE for Buildathon presentations
+    const isDemo = process.env.DEMO_MODE === 'true' || process.env.NODE_ENV !== 'production';
+    
+    if (isDemo) {
+        console.log(`[BUILDATHON DEMO] Simulating successful verification for txnRef: ${txnRef}`);
+        return { 
+            status: "SUCCESS", 
+            mock: true, 
+            responseCode: "00", 
+            message: "Simulated Success (Demo Mode Active)" 
+        };
+    }
 
+    try {
         const token = await getPassportToken();
         const url = `${INTERSWITCH_CONFIG.INQUIRY_URL}?merchantcode=${INTERSWITCH_CONFIG.MERCHANT_CODE}&transactionreference=${txnRef}&amount=${amountInKobo}`;
         

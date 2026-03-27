@@ -1,14 +1,16 @@
 from datetime import datetime
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from rating_system import Specialist
 from recommendations import recommend_specialist
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/", methods=["GET", "HEAD"])
 def health_check():
-    return jsonify({"status": "healthy"}), 200
+    return jsonify({"status": "healthy", "service": "MediConnect AI Engine"}), 200
 
 
 @app.route("/recommend", methods=["POST"])

@@ -395,8 +395,31 @@
     "email": "spec_4nehxul0s1mmn7z76l0@medicare.com",
     "password": "$2b$10$ZxApq8aaHHYRyyneqRMp3.epLoBrbsOA13tVgQzPJQOKdBFf7myUG",
     "role": "SPECIALIST",
-    "phoneNumber": "08056354409",
     "isVerified": false,
     "createdAt": "2026-03-26T21:19:49.162Z"
+  },
+  {
+    "id": "judge-patient-001",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "patient",
+    "createdAt": "2026-03-27T05:00:00.000Z"
+  },
+  {
+    "id": "judge-specialist-001",
+    "name": "Dr. Smith",
+    "email": "smith@medicare.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "specialist",
+    "createdAt": "2026-03-27T05:00:00.000Z"
+  },
+  {
+    "id": "judge-admin-001",
+    "name": "System Admin",
+    "email": "admin@mediconnect.com",
+    "password": "$2b$10$z5D/ifghVLkCcg0hcA8jGuFIjaXj6ugDYfhC6bxX5RhuVVWUHfIte",
+    "role": "admin",
+    "createdAt": "2026-03-27T05:00:00.000Z"
   }
 ]

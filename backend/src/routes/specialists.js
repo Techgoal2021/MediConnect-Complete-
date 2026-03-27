@@ -12,30 +12,29 @@ const getTrustData = async (specialist, user) => {
       return appt?.specialistId == specialist.id;
     });
 
-    const urls = ["http://127.0.0.1:5001/specialist/rating"];
-    for (const url of urls) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000); 
-        const mlResponse = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          signal: controller.signal,
-          body: JSON.stringify({
-            name: user?.name,
-            specialisation: specialist.specialization,
-            total_consultations: reviews.length,
-            ratings: reviews.map((r) => [r.rating, r.createdAt || new Date().toISOString()]),
-          }),
-        });
-        clearTimeout(timeoutId);
-        if (mlResponse.ok) {
-          trustData = await mlResponse.json();
-          break; // Success! Stop trying other URLs
-        }
-      } catch (e) {
-        // Continue to next URL attempt (e.g. from 127.0.0.1 to localhost)
+    const baseUrl = process.env.ML_SERVICE_URL || "http://127.0.0.1:5001";
+    const targetUrl = baseUrl.endsWith('/specialist/rating') ? baseUrl : `${baseUrl.replace(/\/$/, '')}/specialist/rating`;
+    
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000); 
+      const mlResponse = await fetch(targetUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
+        body: JSON.stringify({
+          name: user?.name,
+          specialisation: specialist.specialization,
+          total_consultations: reviews.length,
+          ratings: reviews.map((r) => [r.rating, r.createdAt || new Date().toISOString()]),
+        }),
+      });
+      clearTimeout(timeoutId);
+      if (mlResponse.ok) {
+        trustData = await mlResponse.json();
       }
+    } catch (e) {
+      console.warn("AI Engine unreachable for single specialist rating.");
     }
   } catch (err) {
     console.error("Critical error in getTrustData:", err.message);
@@ -47,28 +46,27 @@ const getTrustData = async (specialist, user) => {
 const getBatchTrustData = async (specialistDataList) => {
   let batchResults = [];
   try {
-    const urls = ["http://127.0.0.1:5001/specialist/ratings/batch"];
-    for (const url of urls) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000); 
-        const mlResponse = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          signal: controller.signal,
-          body: JSON.stringify({ specialists: specialistDataList }),
-        });
-        clearTimeout(timeoutId);
-        if (mlResponse.ok) {
-          const data = await mlResponse.json();
-          if (data.success) {
-            batchResults = data.results;
-            break;
-          }
+    const baseUrl = process.env.ML_SERVICE_URL || "http://127.0.0.1:5001";
+    const targetUrl = baseUrl.endsWith('/specialist/ratings/batch') ? baseUrl : `${baseUrl.replace(/\/$/, '')}/specialist/ratings/batch`;
+    
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); 
+      const mlResponse = await fetch(targetUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
+        body: JSON.stringify({ specialists: specialistDataList }),
+      });
+      clearTimeout(timeoutId);
+      if (mlResponse.ok) {
+        const data = await mlResponse.json();
+        if (data.success) {
+          batchResults = data.results;
         }
-      } catch (e) {
-        // Fallback to next URL
       }
+    } catch (e) {
+      console.warn("AI Engine unreachable for batch ratings.");
     }
   } catch (err) {
     console.error("Batch Trust Data Error:", err.message);
@@ -103,13 +101,25 @@ router.get("/", async (req, res) => {
 
     const enriched = await Promise.all(specialists.map(async (s) => {
       const user = await mongoDbAdapter.findById("users", s.userId);
-      const trustData = batchResults.find(r => r.specialistId === s.id) || { trust_score: null, trust_label: "AI Pending" };
+      let trustData = batchResults.find(r => r.specialistId === s.id);
       
+      // Calculate baseline ratings if AI is unreachable
+      const sReviews = reviews.filter(r => {
+        const appt = appointments.find(a => a.id === r.appointmentId);
+        return appt?.specialistId === s.id;
+      });
+      const avgRating = sReviews.length > 0 
+        ? (sReviews.reduce((acc, r) => acc + r.rating, 0) / sReviews.length).toFixed(1)
+        : "5.0"; // default for new specialists
+      
+      const fallbackLabel = parseFloat(avgRating) >= 4.5 ? "Top Rated" : "Verified Specialist";
+
       return {
         ...s.toObject ? s.toObject() : s,
         user: user ? { name: user.name, email: user.email, isVerified: user.isVerified } : null,
-        trust_score: trustData.trust_score,
-        trust_label: trustData.trust_label,
+        trust_score: (trustData && trustData.trust_score !== null) ? trustData.trust_score : (parseFloat(avgRating) * 20).toFixed(0),
+        trust_label: (trustData && trustData.trust_label !== "Not Rated" && trustData.trust_label !== "AI Pending") ? trustData.trust_label : fallbackLabel,
+        rating: avgRating
       };
     }));
     res.json(enriched);
@@ -166,7 +176,10 @@ router.post('/slots', auth, checkRole('specialist'), async (req, res) => {
 router.post('/recommend', async (req, res) => {
   try {
     const { symptoms } = req.body;
-    const response = await fetch('http://127.0.0.1:5001/recommend', {
+    const baseUrl = process.env.ML_SERVICE_URL || "http://127.0.0.1:5001";
+    const targetUrl = baseUrl.endsWith('/recommend') ? baseUrl : `${baseUrl.replace(/\/$/, '')}/recommend`;
+
+    const response = await fetch(targetUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ symptoms })

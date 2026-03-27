@@ -8,6 +8,7 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import SpecialistDetails from "./Pages/SpecialistDetails";
 import Dashboard from "./Pages/Dashboard";
+import ForgotPassword from "./Pages/ForgotPassword";
 
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="specialist/:id" element={<SpecialistDetails />} />
         <Route path="appointments" element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
       </Route>
     </Routes>
     </>
