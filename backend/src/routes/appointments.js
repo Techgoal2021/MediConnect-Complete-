@@ -38,7 +38,11 @@ router.get('/my', auth, async (req, res) => {
     if (req.user.role === 'patient') {
       appointments = (await mongoDbAdapter.findAll('appointments')).filter(a => a.patientId === req.user.id);
     } else {
-      const specialist = await mongoDbAdapter.findOne('specialists', s => s.userId === req.user.id);
+      // Find specialist profile linked to this user (may not exist for newly registered specialists)
+      const specialist = await mongoDbAdapter.findOne('specialists', { userId: req.user.id });
+      if (!specialist) {
+        return res.json([]); // No specialist profile yet — return empty appointments
+      }
       appointments = (await mongoDbAdapter.findAll('appointments')).filter(a => a.specialistId === specialist.id);
     }
 
