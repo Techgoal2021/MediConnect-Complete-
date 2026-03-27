@@ -1,11 +1,7 @@
 {
   "version": 2,
-  "name": "mediconnect-full",
+  "name": "mediconnect-fullstack",
   "builds": [
-    {
-      "src": "frontend/dist/**",
-      "use": "@vercel/static"
-    },
     {
       "src": "backend/src/index.js",
       "use": "@vercel/node"
@@ -13,6 +9,11 @@
     {
       "src": "frontend/api/index.py",
       "use": "@vercel/python"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "frontend/dist" }
     }
   ],
   "routes": [
@@ -22,20 +23,16 @@
     },
     {
       "src": "/api/(.*)",
-      "dest": "backend/src/index.js",
+      "dest": "backend/src/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1",
       "check": true
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/dist/$1",
-      "check": true
-    },
-    {
-      "src": "/(.*)",
-      "dest": "frontend/dist/index.html"
+      "dest": "/index.html"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
