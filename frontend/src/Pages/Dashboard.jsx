@@ -167,23 +167,29 @@ const Dashboard = () => {
       <div className="container mx-auto px-6 lg:px-20">
         
         {/* Dashboard Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-end mb-16 lg:mb-20 gap-8">
+        <div className={`flex flex-col lg:flex-row justify-between items-end mb-16 lg:mb-20 gap-8 p-10 rounded-sm ${user?.role === 'specialist' ? 'bg-navy text-white' : 'bg-white border border-slate-100'}`}>
           <div className="space-y-4">
-             <h5 className="text-primary font-black tracking-[0.4em] uppercase text-xs flex items-center">
+             <h5 className={`font-black tracking-[0.4em] uppercase text-xs flex items-center ${user?.role === 'specialist' ? 'text-primary' : 'text-primary'}`}>
                 <span className="w-10 h-[2px] bg-primary mr-3"></span>
-                User Portal
+                {user?.role === 'specialist' ? '🩺 Specialist Portal' : '👤 Patient Portal'}
              </h5>
-             <h2 className="text-4xl lg:text-5xl font-serif font-black text-navy leading-tight">
-                Welcome Back, <span className="text-primary italic">{user?.name.split(' ')[0]}</span>
+             <h2 className={`text-4xl lg:text-5xl font-serif font-black leading-tight ${user?.role === 'specialist' ? 'text-white' : 'text-navy'}`}>
+                {user?.role === 'specialist' ? 'Dr. ' : ''}<span className="text-primary italic">{user?.name.split(' ')[0]}</span>'s Dashboard
              </h2>
+             <p className={`text-sm font-medium ${user?.role === 'specialist' ? 'text-white/60' : 'text-slate-400'}`}>
+               {user?.role === 'specialist' ? 'Manage your consultations and patient schedule below.' : 'View your appointments and manage your healthcare journey.'}
+             </p>
           </div>
           <div className="flex items-center space-x-4">
              <div className="text-right hidden sm:block">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Account Type</p>
-                <p className="text-sm font-black text-navy uppercase">{user?.role}</p>
+                <p className={`text-[10px] font-bold uppercase tracking-widest ${user?.role === 'specialist' ? 'text-white/40' : 'text-slate-400'}`}>Account Type</p>
+                <p className={`text-sm font-black uppercase ${user?.role === 'specialist' ? 'text-primary' : 'text-navy'}`}>{user?.role}</p>
              </div>
-             <div className="w-14 h-14 bg-navy rounded-sm flex items-center justify-center text-white shadow-xl">
-                <svg className="w-8 h-8 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
+             <div className={`w-14 h-14 rounded-sm flex items-center justify-center text-white shadow-xl ${user?.role === 'specialist' ? 'bg-primary' : 'bg-navy'}`}>
+                {user?.role === 'specialist'
+                  ? <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+                  : <svg className="w-8 h-8 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
+                }
              </div>
           </div>
         </div>
@@ -191,12 +197,12 @@ const Dashboard = () => {
         {/* Stats Grid (Quick Glance) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           <div className="card-medcare p-10 border-b-4 border-primary">
-             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Total Appointments</p>
+             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{user?.role === 'specialist' ? 'Total Patients' : 'Total Appointments'}</p>
              <h4 className="text-3xl font-serif font-black text-navy">{appointments.length}</h4>
           </div>
           <div className="card-medcare p-10 border-b-4 border-navy">
-             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Pending Payments</p>
-             <h4 className="text-3xl font-serif font-black text-navy">{appointments.filter(a => a.paymentStatus !== 'paid').length}</h4>
+             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{user?.role === 'specialist' ? 'Confirmed Sessions' : 'Pending Payments'}</p>
+             <h4 className="text-3xl font-serif font-black text-navy">{user?.role === 'specialist' ? appointments.filter(a => a.status === 'confirmed').length : appointments.filter(a => a.paymentStatus !== 'paid').length}</h4>
           </div>
           <div className="card-medcare p-10 border-b-4 border-primary/20">
              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Platform Status</p>
@@ -208,9 +214,11 @@ const Dashboard = () => {
 
         {/* Appointments Table */}
         <div className="card-medcare overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.05)]">
-          <div className="p-10 border-b border-slate-50 flex justify-between items-center bg-navy text-white">
-            <h3 className="text-xs font-black uppercase tracking-[0.3em]">Recent Consultations</h3>
-            <Link to="/specialists" className="text-[10px] font-black uppercase tracking-widest border-b border-primary hover:text-primary transition">Book New ⟶</Link>
+          <div className={`p-10 border-b border-slate-50 flex justify-between items-center text-white ${user?.role === 'specialist' ? 'bg-primary' : 'bg-navy'}`}>
+            <h3 className="text-xs font-black uppercase tracking-[0.3em]">{user?.role === 'specialist' ? '📋 Your Patient Schedule' : '📅 Recent Consultations'}</h3>
+            {user?.role !== 'specialist' && (
+              <Link to="/specialists" className="text-[10px] font-black uppercase tracking-widest border-b border-white/40 hover:text-primary transition">Book New ⟶</Link>
+            )}
           </div>
           
           <div className="overflow-x-auto">

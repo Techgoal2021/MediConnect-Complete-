@@ -11,7 +11,7 @@ const Hero = () => {
           <img
             src={Heroimg}
             alt="Medical Professional"
-            className="w-full h-full object-cover object-center lg:object-right scale-110"
+            className="w-full h-full object-cover object-right scale-110"
           />
           {/* Subtle Blue Tint Overlay */}
           <div className="absolute inset-0 bg-navy/5 mix-blend-multiply"></div>
