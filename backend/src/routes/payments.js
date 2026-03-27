@@ -2,17 +2,17 @@ const express = require('express');
 const router = express.Router();
 const { auth } = require('../utils/authMiddleware');
 const { generateSHA512Hash, INTERSWITCH_CONFIG } = require('../utils/interswitch');
-const jsonDb = require('../utils/jsonDb');
+const mongoDbAdapter = require('../utils/mongoDbAdapter');
 
 /**
  * POST /api/payments/initiate
  * Generates the necessary Hash and Metadata for Interswitch WebPay
  */
-router.post('/initiate', auth, (req, res) => {
+router.post('/initiate', auth, async (req, res) => {
     try {
         const { appointmentId, amount } = req.body;
         
-        const appointment = jsonDb.findById('appointments', appointmentId);
+        const appointment = await mongoDbAdapter.findById('appointments', appointmentId);
         if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
 
         // Interswitch Requirement: Amount must be in Kobo
@@ -28,7 +28,7 @@ router.post('/initiate', auth, (req, res) => {
         const hash = generateSHA512Hash(txnRef, amountInKobo, callbackUrl);
 
         // Store the reference in the appointment for later verification
-        jsonDb.update('appointments', appointmentId, { 
+        await mongoDbAdapter.update('appointments', appointmentId, { 
             paymentReference: txnRef,
             amountInKobo: amountInKobo
         });

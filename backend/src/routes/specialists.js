@@ -1,5 +1,5 @@
 const express = require('express');
-const jsonDb = require('../utils/jsonDb');
+const mongoDbAdapter = require('../utils/mongoDbAdapter');
 const { auth, checkRole } = require('../utils/authMiddleware');
 const router = express.Router();
 
@@ -7,8 +7,8 @@ const router = express.Router();
 const getTrustData = async (specialist, user) => {
   let trustData = { trust_score: null, trust_label: "Not Yet Rated" };
   try {
-    const reviews = jsonDb.findAll("reviews").filter((r) => {
-      const appt = jsonDb.findById("appointments", r.appointmentId);
+    const reviews = (await mongoDbAdapter.findAll("reviews")).filter(async (r) => {
+      const appt = await mongoDbAdapter.findById("appointments", r.appointmentId);
       return appt?.specialistId == specialist.id;
     });
 
@@ -79,13 +79,13 @@ const getBatchTrustData = async (specialistDataList) => {
 // Get all specialists with enriched details
 router.get("/", async (req, res) => {
   try {
-    const specialists = jsonDb.findAll("specialists");
-    const reviews = jsonDb.findAll("reviews");
-    const appointments = jsonDb.findAll("appointments");
+    const specialists = await mongoDbAdapter.findAll("specialists");
+    const reviews = await mongoDbAdapter.findAll("reviews");
+    const appointments = await mongoDbAdapter.findAll("appointments");
 
     // Prepare batch data for AI
-    const batchInput = specialists.map(s => {
-      const user = jsonDb.findById("users", s.userId);
+    const batchInput = await Promise.all(specialists.map(async (s) => {
+      const user = await mongoDbAdapter.findById("users", s.userId);
       const sReviews = reviews.filter(r => {
         const appt = appointments.find(a => a.id === r.appointmentId);
         return appt?.specialistId === s.id;
@@ -97,21 +97,21 @@ router.get("/", async (req, res) => {
         total_consultations: sReviews.length,
         ratings: sReviews.map(r => [r.rating, r.createdAt || new Date().toISOString()])
       };
-    });
+    }));
 
     const batchResults = await getBatchTrustData(batchInput);
 
-    const enriched = specialists.map((s) => {
-      const user = jsonDb.findById("users", s.userId);
+    const enriched = await Promise.all(specialists.map(async (s) => {
+      const user = await mongoDbAdapter.findById("users", s.userId);
       const trustData = batchResults.find(r => r.specialistId === s.id) || { trust_score: null, trust_label: "AI Pending" };
       
       return {
-        ...s,
+        ...s.toObject ? s.toObject() : s,
         user: user ? { name: user.name, email: user.email, isVerified: user.isVerified } : null,
         trust_score: trustData.trust_score,
         trust_label: trustData.trust_label,
       };
-    });
+    }));
     res.json(enriched);
   } catch (err) {
     console.error("Specialists Route Error:", err);
@@ -122,16 +122,16 @@ router.get("/", async (req, res) => {
 // Get specific specialist with details and available slots
 router.get("/:id", async (req, res) => {
   try {
-    const specialist = jsonDb.findById("specialists", req.params.id);
+    const specialist = await mongoDbAdapter.findById("specialists", req.params.id);
     if (!specialist) return res.status(404).json({ message: "Specialist not found" });
 
-    const user = jsonDb.findById("users", specialist.userId);
-    const slots = jsonDb.findAll("slots").filter((s) => s.specialistId === specialist.id && !s.isBooked);
+    const user = await mongoDbAdapter.findById("users", specialist.userId);
+    const slots = (await mongoDbAdapter.findAll("slots")).filter((s) => s.specialistId === specialist.id && !s.isBooked);
 
     const trustData = await getTrustData(specialist, user);
 
     res.json({
-      ...specialist,
+      ...specialist.toObject ? specialist.toObject() : specialist,
       user: { name: user?.name, email: user?.email, phoneNumber: user?.phoneNumber },
       slots,
       trust_score: trustData.trust_score,
@@ -143,13 +143,13 @@ router.get("/:id", async (req, res) => {
 });
 
 // Create availability slots (For Specialists)
-router.post('/slots', auth, checkRole('specialist'), (req, res) => {
+router.post('/slots', auth, checkRole('specialist'), async (req, res) => {
   try {
     const { startTime, endTime } = req.body;
-    const specialist = jsonDb.findOne('specialists', s => s.userId === req.user.id);
+    const specialist = await mongoDbAdapter.findOne('specialists', s => s.userId === req.user.id);
     if (!specialist) return res.status(404).json({ message: 'Specialist profile not found' });
 
-    const slot = jsonDb.create('slots', {
+    const slot = await mongoDbAdapter.create('slots', {
       specialistId: specialist.id,
       startTime,
       endTime,

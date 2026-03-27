@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const jsonDb = require('../utils/jsonDb');
+const mongoDbAdapter = require('../utils/mongoDbAdapter');
 const router = express.Router();
 
 // Register Patient or Specialist
@@ -12,7 +12,7 @@ router.post('/register', async (req, res) => {
     console.log("Registration attempt:", { name, email, role });
 
     // Check if user exists (case-insensitive)
-    const users = jsonDb.findAll('users');
+    const users = await mongoDbAdapter.findAll('users');
     if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
       console.log("Registration failed: User already exists", email);
       return res.status(400).json({ 
@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const user = jsonDb.create('users', {
+    const user = await mongoDbAdapter.create('users', {
       name,
       email,
       password: hashedPassword,
@@ -38,7 +38,7 @@ router.post('/register', async (req, res) => {
 
     // If specialist, create profile
     if (role === 'specialist') {
-      jsonDb.create('specialists', {
+      await mongoDbAdapter.create('specialists', {
         userId: user.id,
         specialization: '',
         bio: '',
@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = jsonDb.findOne('users', u => u.email.toLowerCase() === email.toLowerCase());
+    const user = await mongoDbAdapter.findOne('users', u => u.email.toLowerCase() === email.toLowerCase());
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -91,7 +91,7 @@ router.post('/verify-identity', async (req, res) => {
   try {
     const { bvn, userId } = req.body;
 
-    const user = jsonDb.findById('users', userId);
+    const user = await mongoDbAdapter.findById('users', userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     // SIMULATED LECTURE REQUIREMENT: Interswitch API Marketplace Bearer Token
@@ -99,7 +99,7 @@ router.post('/verify-identity', async (req, res) => {
     const marketplaceToken = `mkt_bearer_${Math.random().toString(36).substr(2)}`;
     console.log(`INTERSWITCH MARKETPLACE: Bearer Token assigned: ${marketplaceToken}`);
 
-    jsonDb.update('users', userId, { 
+    await mongoDbAdapter.update('users', userId, { 
       isVerified: true,
       marketplaceToken: marketplaceToken // Simulating the API link
     });

@@ -1,30 +1,26 @@
 const express = require('express');
-const jsonDb = require('../utils/jsonDb');
+const mongoDbAdapter = require('../utils/mongoDbAdapter');
 const { auth } = require('../utils/authMiddleware');
 const { queryTransactionStatus } = require('../utils/interswitch');
 const router = express.Router();
 
 // Book an appointment
-router.post('/book', auth, (req, res) => {
+router.post('/book', auth, async (req, res) => {
   try {
     const { specialistId, slotId } = req.body;
-
-    const slot = jsonDb.findById('slots', slotId);
+    const slot = await mongoDbAdapter.findById('slots', slotId);
     if (!slot || slot.isBooked) {
       return res.status(400).json({ message: 'Slot is unavailable' });
     }
-
-    const appointment = jsonDb.create('appointments', {
+    const appointment = await mongoDbAdapter.create('appointments', {
       patientId: req.user.id,
       specialistId,
       slotId,
       status: 'pending',
       paymentStatus: 'unpaid'
     });
-
     // Mark slot as booked
-    jsonDb.update('slots', slotId, { isBooked: true });
-
+    await mongoDbAdapter.update('slots', slotId, { isBooked: true });
     res.status(201).json({
       message: 'Appointment booked successfully. Please proceed to payment.',
       appointmentId: appointment.id
@@ -36,30 +32,30 @@ router.post('/book', auth, (req, res) => {
 });
 
 // Get my appointments (Patient or Specialist)
-router.get('/my', auth, (req, res) => {
+router.get('/my', auth, async (req, res) => {
   try {
     let appointments;
     if (req.user.role === 'patient') {
-      appointments = jsonDb.findAll('appointments').filter(a => a.patientId === req.user.id);
+      appointments = (await mongoDbAdapter.findAll('appointments')).filter(a => a.patientId === req.user.id);
     } else {
-      const specialist = jsonDb.findOne('specialists', s => s.userId === req.user.id);
-      appointments = jsonDb.findAll('appointments').filter(a => a.specialistId === specialist.id);
+      const specialist = await mongoDbAdapter.findOne('specialists', s => s.userId === req.user.id);
+      appointments = (await mongoDbAdapter.findAll('appointments')).filter(a => a.specialistId === specialist.id);
     }
 
-    // Enrich with data
-    const enriched = appointments.map(a => {
-      const specialist = jsonDb.findById('specialists', a.specialistId);
-      const specUser = jsonDb.findById('users', specialist?.userId);
-      const patientUser = jsonDb.findById('users', a.patientId);
-      const slot = jsonDb.findById('slots', a.slotId);
+    // Enrich with data (Async map)
+    const enriched = await Promise.all(appointments.map(async (a) => {
+      const specialist = await mongoDbAdapter.findById('specialists', a.specialistId);
+      const specUser = await mongoDbAdapter.findById('users', specialist?.userId);
+      const patientUser = await mongoDbAdapter.findById('users', a.patientId);
+      const slot = await mongoDbAdapter.findById('slots', a.slotId);
       
       return { 
-        ...a, 
+        ...a.toObject ? a.toObject() : a, 
         specialist: { name: specUser?.name }, 
         patient: { name: patientUser?.name },
         slot 
       };
-    });
+    }));
 
     res.json(enriched);
   } catch (err) {
@@ -68,10 +64,10 @@ router.get('/my', auth, (req, res) => {
 });
 
 // 1. Transaction Status Query (Interswitch Requirement)
-router.get('/verify-status/:txnRef', auth, (req, res) => {
+router.get('/verify-status/:txnRef', auth, async (req, res) => {
   try {
     const { txnRef } = req.params;
-    const appointment = jsonDb.findOne('appointments', a => a.paymentReference === txnRef);
+    const appointment = await mongoDbAdapter.findOne('appointments', a => a.paymentReference === txnRef);
     
     if (!appointment) return res.status(404).json({ message: 'Transaction reference not found' });
     
@@ -95,8 +91,7 @@ router.get('/verify-status/:txnRef', auth, (req, res) => {
 router.post('/verify-payment', auth, async (req, res) => {
   try {
     const { appointmentId, reference } = req.body;
-
-    const appointment = jsonDb.findById('appointments', appointmentId);
+    const appointment = await mongoDbAdapter.findById('appointments', appointmentId);
     if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
 
     // SECURITY: Ensure user is the owner of the appointment being verified
@@ -116,7 +111,7 @@ router.post('/verify-payment', auth, async (req, res) => {
     }
 
     // 2. Update the database on success
-    jsonDb.update('appointments', appointmentId, {
+    await mongoDbAdapter.update('appointments', appointmentId, {
       paymentStatus: 'paid',
       status: 'confirmed',
       paymentReference: reference,

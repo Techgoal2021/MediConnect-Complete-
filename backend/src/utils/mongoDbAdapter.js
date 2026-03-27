@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 const Specialist = require('../models/Specialist');
 const Appointment = require('../models/Appointment');
+const Review = require('../models/Review');
+const Slot = require('../models/Slot');
 
 const models = {
   users: User,
   specialists: Specialist,
-  appointments: Appointment
+  appointments: Appointment,
+  reviews: Review,
+  slots: Slot
 };
 
 const mongoDbAdapter = {
