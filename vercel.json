@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "mediconnect-all-in-one",
+  "name": "mediconnect-monorepo",
   "builds": [
     {
       "src": "backend/src/index.js",
@@ -13,24 +13,28 @@
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/ai/(.*)",
-      "dest": "frontend/api/index.py"
+      "source": "/api/ai/(.*)",
+      "destination": "frontend/api/index.py"
     },
     {
-      "src": "/api/(.*)",
-      "dest": "backend/src/index.js"
+      "source": "/api/(.*)",
+      "destination": "backend/src/index.js"
     },
     {
-      "handle": "filesystem"
+      "source": "/(.*)",
+      "destination": "/frontend/$1",
+      "check": true
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/frontend/index.html"
     }
   ]
 }

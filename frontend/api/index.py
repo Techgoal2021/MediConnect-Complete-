@@ -6,12 +6,12 @@ from recommendations import recommend_specialist
 app = Flask(__name__)
 
 
-@app.route("/", methods=["GET", "HEAD"])
+@app.route("/api/ai/", methods=["GET", "HEAD"])
 def health_check():
-    return jsonify({"status": "healthy"}), 200
+    return jsonify({"status": "healthy", "service": "MediConnect AI Engine"}), 200
 
 
-@app.route("/recommend", methods=["POST"])
+@app.route("/api/ai/recommend", methods=["POST"])
 def recommend():
     data = request.get_json()
     symptoms = data.get("symptoms", "")
@@ -19,7 +19,7 @@ def recommend():
     return jsonify({"specialist": result})
 
 
-@app.route("/specialist/rating", methods=["POST"])
+@app.route("/api/ai/specialist/rating", methods=["POST"])
 def get_rating():
     data = request.get_json()
     name = data.get("name")
@@ -41,7 +41,7 @@ def get_rating():
     return jsonify({"trust_score": score, "trust_label": label})
 
 
-@app.route("/specialist/ratings/batch", methods=["POST"])
+@app.route("/api/ai/specialist/ratings/batch", methods=["POST"])
 def get_ratings_batch():
     try:
         data = request.get_json()
@@ -74,6 +74,15 @@ def get_ratings_batch():
         return jsonify({"success": True, "results": results})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+@app.errorhandler(404)
+def resource_not_found(e):
+    return jsonify({
+        "success": False,
+        "error": "Not Found in AI Engine",
+        "path": request.path,
+        "help": "If you see this, the request reached the AI Engine but the flask route didn't match."
+    }), 404
 
 
 if __name__ == "__main__":

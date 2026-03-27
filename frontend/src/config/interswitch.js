@@ -6,6 +6,8 @@
  * to comply with PCI-DSS and Interswitch security standards.
  */
 
+import API_CONFIG from "./api";
+
 export const INTERSWITCH_CONFIG = {
   // Publicly safe identifiers
   MERCHANT_CODE: import.meta.env.VITE_INTERSWITCH_MERCHANT_CODE || "MX26070",
@@ -37,7 +39,7 @@ export const INTERSWITCH_CONFIG = {
    */
   getPaymentParams: async (appointmentId, amount, token) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/payments/initiate`, {
+      const response = await fetch(`${API_CONFIG}/payments/initiate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
