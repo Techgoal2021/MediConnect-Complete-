@@ -4,7 +4,7 @@ import Heroimg from "../Image/Hero/home-banner.jpg";
 
 const Hero = () => {
   return (
-    <section className="relative w-full overflow-visible mb-32 lg:mb-40">
+    <section className="relative w-full overflow-visible mb-16 md:mb-32 lg:mb-40">
       {/* 1. Background Wrapper */}
       <div className="relative w-full h-[600px] lg:h-[90vh] bg-medical overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
@@ -26,18 +26,18 @@ const Hero = () => {
                 <span className="w-12 h-[2px] bg-primary mr-4"></span>
                 We Provide Best Healthcare
               </h5>
-              <h1 className="text-5xl lg:text-7xl font-serif font-black text-navy leading-[1.1] mb-8">
-                Your Health is Our <br />
-                <span className="text-primary italic">Priority</span> & Commitment
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-black text-navy leading-[1.1] mb-8">
+                Your Health is Our{" "}
+                <span className="text-primary italic">Priority</span>{" "}&amp; Commitment
               </h1>
               <p className="text-slate-500 text-lg max-w-lg mb-12 leading-relaxed font-medium">
                 MediConnect combines world-class medical expertise with cutting-edge technology to bring healthcare directly to your doorstep.
               </p>
-              <div className="flex flex-wrap gap-6">
-                <Link to="/departments" className="btn-medcare-primary shadow-[0_10px_30px_rgba(44,110,160,0.3)]">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link to="/departments" className="btn-medcare-primary shadow-[0_10px_30px_rgba(44,110,160,0.3)] text-center">
                   Make Appointment
                 </Link>
-                <Link to="/about" className="btn-medcare-outline">
+                <Link to="/about" className="btn-medcare-outline text-center">
                   Learn More
                 </Link>
               </div>

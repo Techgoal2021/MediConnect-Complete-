@@ -12,12 +12,12 @@ const departments = [
 
 const DepartmentGrid = ({ title = "Our Medical Services", showHeader = true }) => {
   return (
-    <section className="bg-medical py-24 lg:py-32">
+    <section className="bg-medical py-16 lg:py-32">
       <div className="container mx-auto px-6 lg:px-20">
         {showHeader && (
           <div className="text-center mb-20 max-w-2xl mx-auto">
             <h5 className="text-primary font-black tracking-[0.3em] uppercase mb-4 text-xs">Expertise Areas</h5>
-            <h2 className="text-4xl lg:text-5xl font-serif font-black text-navy mb-6 leading-tight">High Performance Services For All <span className="text-primary italic">Department</span></h2>
+            <h2 className="text-3xl lg:text-5xl font-serif font-black text-navy mb-6 leading-tight">High Performance Services For All <span className="text-primary italic">Departments</span></h2>
             <div className="w-20 h-1 bg-primary mx-auto"></div>
           </div>
         )}
