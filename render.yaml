@@ -4,12 +4,12 @@ services:
     name: mediconnect-ai
     runtime: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    startCommand: "gunicorn app:app --bind 0.0.0.0:$PORT"
     rootDir: "backend/ml_service"
     plan: free
     envVars:
-      - key: PORT
-        value: 10000
+      - key: PYTHON_VERSION
+        value: 3.11.0
 
   # Main Backend API (Node.js)
   - type: web
@@ -23,11 +23,13 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
-        fromContext: MONGO_URI # You'll set this once in Render
+        sync: false
       - key: JWT_SECRET
         value: "mediconnect_super_secret_buildathon_key_2024"
+      - key: DEMO_MODE
+        value: "true"
       - key: ML_SERVICE_URL
         fromService:
           type: web
           name: mediconnect-ai
-          property: host
+          property: hostport
