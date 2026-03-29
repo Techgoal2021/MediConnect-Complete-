@@ -42,34 +42,41 @@ const getTrustData = async (specialist, user) => {
   return trustData;
 };
 
-// Helper to fetch batch trust data from ML service
+// Simple in-memory cache for batch trust results (1 minute TTL)
+let batchCache = { data: null, timestamp: 0 };
+const CACHE_TTL = 60000;
+
 const getBatchTrustData = async (specialistDataList) => {
+  const now = Date.now();
+  if (batchCache.data && (now - batchCache.timestamp < CACHE_TTL)) {
+    return batchCache.data;
+  }
+
   let batchResults = [];
   try {
-    const baseUrl = process.env.ML_SERVICE_URL || "http://127.0.0.1:5001";
-    const targetUrl = baseUrl.endsWith('/specialist/ratings/batch') ? baseUrl : `${baseUrl.replace(/\/$/, '')}/specialist/ratings/batch`;
+    const baseUrl = (process.env.ML_SERVICE_URL || "http://127.0.0.1:5001").replace(/\/$/, '');
+    const targetUrl = `${baseUrl}/specialist/ratings/batch`;
     
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000); 
-      const mlResponse = await fetch(targetUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        signal: controller.signal,
-        body: JSON.stringify({ specialists: specialistDataList }),
-      });
-      clearTimeout(timeoutId);
-      if (mlResponse.ok) {
-        const data = await mlResponse.json();
-        if (data.success) {
-          batchResults = data.results;
-        }
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500); // Tighter timeout
+
+    const mlResponse = await fetch(targetUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
+      body: JSON.stringify({ specialists: specialistDataList }),
+    });
+    
+    clearTimeout(timeoutId);
+    if (mlResponse.ok) {
+      const data = await mlResponse.json();
+      if (data.success) {
+        batchResults = data.results;
+        batchCache = { data: batchResults, timestamp: now }; // Update cache
       }
-    } catch (e) {
-      console.warn("AI Engine unreachable for batch ratings.");
     }
-  } catch (err) {
-    console.error("Batch Trust Data Error:", err.message);
+  } catch (e) {
+    console.warn("AI Engine unreachable or timed out for batch ratings.");
   }
   return batchResults;
 };
@@ -77,17 +84,33 @@ const getBatchTrustData = async (specialistDataList) => {
 // Get all specialists with enriched details
 router.get("/", async (req, res) => {
   try {
-    const specialists = await mongoDbAdapter.findAll("specialists");
-    const reviews = await mongoDbAdapter.findAll("reviews");
-    const appointments = await mongoDbAdapter.findAll("appointments");
+    const [specialists, reviews, appointments, users] = await Promise.all([
+      mongoDbAdapter.findAll("specialists"),
+      mongoDbAdapter.findAll("reviews"),
+      mongoDbAdapter.findAll("appointments"),
+      mongoDbAdapter.findAll("users")
+    ]);
 
-    // Prepare batch data for AI
-    const batchInput = await Promise.all(specialists.map(async (s) => {
-      const user = await mongoDbAdapter.findById("users", s.userId);
-      const sReviews = reviews.filter(r => {
-        const appt = appointments.find(a => a.id === r.appointmentId);
-        return appt?.specialistId === s.id;
-      });
+    // 1. Pre-map users by ID for O(1) lookup
+    const userMap = users.reduce((acc, u) => ({ ...acc, [u.id]: u }), {});
+
+    // 2. Pre-map reviews by Specialist ID for O(1) lookup
+    // First, link reviews to their specialistId through appointments
+    const reviewsBySpecialist = {};
+    const apptMap = appointments.reduce((acc, a) => ({ ...acc, [a.id]: a }), {});
+    
+    reviews.forEach(r => {
+      const appt = apptMap[r.appointmentId];
+      if (appt && appt.specialistId) {
+        if (!reviewsBySpecialist[appt.specialistId]) reviewsBySpecialist[appt.specialistId] = [];
+        reviewsBySpecialist[appt.specialistId].push(r);
+      }
+    });
+
+    // 3. Prepare batch input for AI
+    const batchInput = specialists.map(s => {
+      const user = userMap[s.userId];
+      const sReviews = reviewsBySpecialist[s.id] || [];
       return {
         id: s.id,
         name: user?.name,
@@ -95,22 +118,21 @@ router.get("/", async (req, res) => {
         total_consultations: sReviews.length,
         ratings: sReviews.map(r => [r.rating, r.createdAt || new Date().toISOString()])
       };
-    }));
+    });
 
+    // 4. Get batch AI scores (Cached)
     const batchResults = await getBatchTrustData(batchInput);
+    const aiResultMap = batchResults.reduce((acc, r) => ({ ...acc, [r.specialistId]: r }), {});
 
-    const enriched = await Promise.all(specialists.map(async (s) => {
-      const user = await mongoDbAdapter.findById("users", s.userId);
-      let trustData = batchResults.find(r => r.specialistId === s.id);
+    // 5. Final Enrichment
+    const enriched = specialists.map(s => {
+      const user = userMap[s.userId];
+      const trustData = aiResultMap[s.id];
+      const sReviews = reviewsBySpecialist[s.id] || [];
       
-      // Calculate baseline ratings if AI is unreachable
-      const sReviews = reviews.filter(r => {
-        const appt = appointments.find(a => a.id === r.appointmentId);
-        return appt?.specialistId === s.id;
-      });
       const avgRating = sReviews.length > 0 
         ? (sReviews.reduce((acc, r) => acc + r.rating, 0) / sReviews.length).toFixed(1)
-        : "5.0"; // default for new specialists
+        : "5.0";
       
       const fallbackLabel = parseFloat(avgRating) >= 4.5 ? "Top Rated" : "Verified Specialist";
 
@@ -118,10 +140,11 @@ router.get("/", async (req, res) => {
         ...s.toObject ? s.toObject() : s,
         user: user ? { name: user.name, email: user.email, isVerified: user.isVerified } : null,
         trust_score: (trustData && trustData.trust_score !== null) ? trustData.trust_score : (parseFloat(avgRating) * 20).toFixed(0),
-        trust_label: (trustData && trustData.trust_label !== "Not Rated" && trustData.trust_label !== "AI Pending") ? trustData.trust_label : fallbackLabel,
+        trust_label: (trustData && trustData.trust_label && trustData.trust_label !== "Not Rated") ? trustData.trust_label : fallbackLabel,
         rating: avgRating
       };
-    }));
+    });
+
     res.json(enriched);
   } catch (err) {
     console.error("Specialists Route Error:", err);
